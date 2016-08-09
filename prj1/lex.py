@@ -28,11 +28,18 @@ class Lex:
 		return ""
 
 	def checkForCommentLevelers(self,line):
-		currentLvl = self.commentLvl
-		if (currentLvl > 0):
-			return ""
-		elif(currentLvl == 0):
-			return line
+		linePos = 0
+		upPos = line.find("/*", linePos)
+		#while(len(line) > upPos):
+		#	upPos = line.find("/*",linePos)
+		#	downPos = line.find("*/",linePos)
+		#	if (upPos > 0):
+		#		self.commentLvl+=1;
+		#		return ""
+		#	elif(upPos < 0 and self.commentLvl == 0):
+		#
+		return line
+				
 
 	def removeComments(self,fileName):
 		dataFile = open(fileName,"r")
