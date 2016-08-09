@@ -1,0 +1,7 @@
+/*///*
+*/EMPTY/*
+*/
+//one line
+public void main(){
+	int a = 0 - 9;
+}
