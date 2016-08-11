@@ -84,19 +84,75 @@ class Lex:
 		dataFile.close()
 		return tokens
 	
+	def tokenIsKeyword(self, token):
+		for keyword in self.keywords:
+			if(keyword == token):
+				return True
+		return False
+
+	def tokenIsId(self, token):
+		found = re.match(self.idRegex,token)
+		if(found):
+			return True
+		return False
+	
+	def tokenIsInt(self,token):
+		found = re.match(self.intRegex,token)
+		if(found):
+			return True
+		return False
+
+	def tokenIsFloat(self,token):
+		found = re.match(self.floatRegex, token)
+		if(found):
+			return True
+		return False
+
+	def tokenIsSpecialChar(self, token):
+		for char in self.specialChars:
+			if(char == token):
+				return True
+		return False
+
 	def tokenAnalyzer(self, tokens):
 		tokenString = " ".join(str(x) for x in tokens)
 		tokenList = self.splitCharsToken(tokenString)
-		print tokenList
-		#Check if keyword
-			# add as token obj
-		#check if special char
-			# add as token obj
-		#check if Identifier
-			# add as token obj
-		#check if Num
-			#check if float
-				# add as token obj
-			#check if int
-				# add as token obj
-		return tokens
+		tokenObjs = []
+		for i in range(0,len(tokenList)):
+			if(self.tokenIsKeyword(tokenList[i])):
+				tokenObjs.append(Token(tokenList[i], "kw"))	
+			
+			elif(self.tokenIsId(tokenList[i])):
+				tokenObjs.append(Token(tokenList[i], "id"))
+			
+			elif(self.tokenIsInt(tokenList[i])):
+				tokenObjs.append(Token(tokenList[i], "int"))
+			
+			elif(self.tokenIsFloat(tokenList[i])):
+				tokenObjs.append(Token(tokenList[i], "float"))
+
+			elif(self.tokenIsSpecialChar(tokenList[i])):
+				if(tokenList[i] == ">" or tokenList[i] == "<" or tokenList[i] == "!" or tokenList[i] == "="):
+					if((i+1) != len(tokenList)):
+
+						if(tokenList[i+1] == "="):
+							msg = tokenList[i] + tokenList[i+1]
+							tokenObjs.append(Token(msg, msg))
+							continue
+
+					elif(tokenList[i] == "!"):
+						tokenObjs.append(Token(tokenList[i], "Error"))
+						continue
+				tokenObjs.append(Token(tokenList[i], tokenList[i]))
+
+			else:
+				tokenObjs.append(Token(tokenList[i],"Error"))
+
+		return tokenObjs
+	def printTokenTable(self, tokens):
+		print "token	|type	"
+		print "-----------------"
+		for token in tokens:
+			row = token.getValue() + "	|" + token.getType()
+			print row
+		return

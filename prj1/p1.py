@@ -7,4 +7,5 @@ lexer = Lex()
 if (lexer.fileFound(fileName)):
         serializedTokens = lexer.removeComments(fileName)
 	tokens = lexer.tokenAnalyzer(serializedTokens)
-        #printTokenTable(tokens)
+        lexer.printTokenTable(tokens)
+	#printTokenTable(tokens)
