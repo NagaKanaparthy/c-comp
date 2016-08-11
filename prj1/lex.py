@@ -149,6 +149,7 @@ class Lex:
 				tokenObjs.append(Token(tokenList[i],"Error"))
 
 		return tokenObjs
+
 	def printTokenTable(self, tokens):
 		print "token	|type	"
 		print "-----------------"
