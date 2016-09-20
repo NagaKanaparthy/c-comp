@@ -7,7 +7,6 @@ from token import Token
 
 #functions
 class Lex:
-	commentLevel = 0
 	keywords = ["if","else","int","void","while","float","return"]
 	specialChars = ['+','-','/','*','<','>', ">=", "<=", "==", "=", "!=", ";",",","(",")","[","]","{","}"] 
 	idRegex=r'([a-zA-Z]+)'
@@ -21,6 +20,56 @@ class Lex:
 		except IOError:
 			print "File Not Found"
 			return False
+	def stripComments(self,filename):
+#	Algorithm
+#	depth counter = 0
+#	while(not end of file)
+#		check charby char for // and /*
+#		if // and depth counter == 0
+#			strip till /n
+#		elif find /* 
+#			depth counter ++
+#		elif find */ and depth couter > 0
+#			depth counter --
+#		append char 
+		depthCounter = 0
+		inputFile = open(filename, "r+")
+		cleanFile = open("temp.c", "w+")
+		with open(filename,'r+') as inputFile:
+			while True:
+				nextChar = inputFile.read(1)
+				print nextChar
+				if not nextChar:
+					break
+				elif nextChar == '/':
+					followChar = inputFile.read(1)
+					if followChar == '/':
+						foundNewLineChar = False
+						while not foundNewLineChar:
+							print "In char loop"
+							nextChar = inputFile.read(1)
+							if nextChar == '\n':
+								print "Next Char:"+nextChar
+								foundNewLineChar == True
+					elif followChar == '*':
+						depthCounter += 1
+						while not depthCounter != 0:
+							nextChar = inputFile.read(1)
+							if nextChar == '/':
+								nextChar = inputFile.read(1)
+								if nextChar == '*':
+									depthCounter += 1
+							elif nextChar == '*':
+								nextChar = inputFile.read(1)
+								if nextChar == '/':
+									depthCounter -= 1
+					else:
+						cleanFile.write(nextChar)
+						cleanFile.write(followChar)
+				else:
+					cleanFile.write(nextChar)
+		cleanFile.close()
+		return
 
 	def stripSingleLineComments(self,line):
 		try:
@@ -115,7 +164,7 @@ class Lex:
 		return False
 
 	def tokenAnalyzer(self, tokens):
-		tokenString = " ".join(str(x) for x in tokens)
+		tokenString = " ".join(str(token) for token in tokens)
 		tokenList = self.splitCharsToken(tokenString)
 		tokenObjs = []
 		for i in range(0,len(tokenList)):

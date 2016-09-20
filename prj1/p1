@@ -5,6 +5,7 @@ from lex import Lex
 fileName = sys.argv[1]
 lexer = Lex()
 if (lexer.fileFound(fileName)):
-        serializedTokens = lexer.removeComments(fileName)
+        lexer.stripComments(fileName)
+	serializedTokens = lexer.removeComments(fileName)
 	tokens = lexer.tokenAnalyzer(serializedTokens)
         lexer.printTokenTable(tokens)
