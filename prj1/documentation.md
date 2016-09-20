@@ -42,4 +42,5 @@ and */ tokens. Orginally I wrote the multi line comment detector
 to leverage the regex features within python. This caused a significant
 amount of overhead to try organizing the detection. Ultimatly, I switched
 to a manual character by character search. I wrote a Finite
-State Machine to handle the changes. The diagram can be found below
+State Machine to handle the changes. The diagram can be found in
+the fsm.png. Additional comments in the classes are present.
