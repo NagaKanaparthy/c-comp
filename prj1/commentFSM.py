@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
 class commentFSM:
+    debugMode = True
     currentChar = ''
     filename = ''
     depth = 0
@@ -20,21 +21,25 @@ class commentFSM:
 
     def startState(self):
         self.getNextChar()
-        if(self.currentChar == '/'):
+        if self.debugMode:
+            print "State 1 :"+self.currentChar
+        if '/' in self.currentChar:
             self.getNextChar()
             self.stateTwo()
-        elif(self.currentChar is None):
+        elif self.currentChar == '':
             return
         else:
             self.stateFive()
         return
 
     def stateTwo(self):
+        if self.debugMode:
+            print "State 2 :"+self.currentChar
         #Handles line comment
-        if(self.currentChar == '/'):
+        if '/' in self.currentChar:
             self.stateThree()
         #Handles multi-line comment
-        elif(self.currentChar == '*'):
+        elif '*' in self.currentChar:
             self.stateFour()
         else:
             self.stateFive('/')
@@ -44,7 +49,9 @@ class commentFSM:
     def stateThree(self):
         while True:
             self.getNextChar()
-            if self.currentChar == '\n':
+            if self.debugMode:
+                print "State 3 : "+self.currentChar
+            if '\n' in self.currentChar:
                 break
         self.startState()
         return
@@ -52,22 +59,29 @@ class commentFSM:
     def stateFour(self):
         self.depth += 1
         self.getNextChar()
-        if self.currentChar == '*':
+        if self.debugMode:
+            print "State 4 - Depth : "+str(self.depth)+" :"+self.currentChar
+        if '*' in self.currentChar:
             self.stateSix()
-        elif self.currentChar == '/':
+        elif '/' in self.currentChar:
             self.stateNine()
         else:
             self.stateEight()
         return
 
     def stateFive(self):
+        if self.debugMode:
+            print "Outputted Char : "+str(self.currentChar)
         if self.outputFile is not None:
             self.outputFile.write(self.currentChar)
         self.startState()
         return
 
     def stateSix(self):
-        if self.currentChar == '/':
+        self.getNextChar()
+        if self.debugMode:
+            print "State 6 : "+self.currentChar
+        if '/' in self.currentChar:
             self.stateSeven()
         else:
             self.stateEight()
@@ -75,26 +89,34 @@ class commentFSM:
 
     def stateSeven(self):
         self.depth -= 1
+        if self.debugMode:
+            print "State 7 - Depth : "+str(self.depth)
         if(self.depth > 0):
-            self.stateFour()
+            self.stateEight()
         else:
             self.startState()
         return
 
     def stateEight(self):
         self.getNextChar()
-        if self.currentChar == '*':
+        if self.debugMode:
+            print "State 8 : "+self.currentChar
+        if '*' in self.currentChar:
             self.stateSix()
-        elif self.currentChar == '/':
-            self.stateFour()
+        elif '/' in self.currentChar:
+            self.stateNine()
         else:
             self.stateEight()
         return
 
     def stateNine(self):
         self.getNextChar()
-        if self.currentChar == '*':
+        if self.debugMode:
+            print "State 9 : "+self.currentChar
+        if '*' in self.currentChar:
             self.stateFour()
+        elif '/' in self.currentChar:
+            self.stateNine()
         else:
             self.stateEight()
         return
