@@ -107,7 +107,7 @@ class commentFSM:
             self.stateSix()
         elif '/' in self.currentChar:
             self.stateNine()
-        elif currentChar == '':
+        elif self.currentChar == '':
             return
         else:
             self.stateEight()
