@@ -17,6 +17,8 @@ class commentFSM:
 
     def getNextChar(self):
         self.currentChar = self.inputFile.read(1)
+        if(self.currentChar == ''):
+            return
         return self.currentChar
 
     def startState(self):
