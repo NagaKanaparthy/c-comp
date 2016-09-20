@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import sys
 class commentFSM:
-    debugMode = True
+    debugMode = False
     currentChar = ''
     filename = ''
     depth = 0
@@ -44,7 +44,7 @@ class commentFSM:
         elif '*' in self.currentChar:
             self.stateFour()
         else:
-            self.stateFive('/')
+            self.outputFile.write('/')
             self.stateFive()
         return
 

@@ -22,42 +22,20 @@ class Lex:
 			print "File Not Found"
 			return False
 
-	def stripSingleLineComments(self,line):
-		try:
-			posOfComment = line.find("//")
-			if(posOfComment == -1):# -1 = Not Found
-				return line
-			else:
-				return line[:posOfComment]
-		except:
-			return line
-		return ""
-
-	def checkForCommentLevelers(self,line):
-		upPos = 0
-		downPos = 0
-
-		if(self.commentLevel == 0):
-			upPos = line.find("/*")
-			if(upPos > -1):
-				self.commentLevel += 1
-				line = line[:upPos]			
-
-		if(self.commentLevel > 0):
-			downPos = line.find("*/")
-			if(downPos > -1):
-				self.commentLevel -= 1
-				line = line[downPos+2:]
-
-		if(self.commentLevel > -1  and (line.find("*/") > -1 or line.find("/*") > -1)):
-			return self.checkForCommentLevelers(line)
-
-		return line	
-
 	def tokenize(self, line):
 		tokens = line.split()
 		return tokens
+	
+	def removeComments(self,fileName):
+		removerStateMachine = commentFSM(fileName)
+		removerStateMachine.startState()
+		return
 
+	def getTokens(self):
+		tokens = []
+		with open('temp.l','r') as cleanFile:
+			tokens.extend(self.tokenize(cleanFile.read()))
+		return tokens
 	def splitCharsToken(self, token):
 		charsPattern = re.compile(r'([ 0-9a-zA-Z]+)*([\]\[{}\)\(;,/(<=)(>=)(!=)+-])')
 		data = re.finditer(charsPattern,token)
@@ -73,20 +51,6 @@ class Lex:
 			finalList.extend(token.split())
 		return finalList
 						
-	def removeComments(self,fileName):
-		stateMachine = commentFSM(fileName)
-		stateMachine.startState()
-		print "End"
-		#dataFile = open(fileName,"r")
-		#tokens = []
-		#for line in iter(dataFile):
-		#	line = self.stripSingleLineComments(line)
-		#	line = self.checkForCommentLevelers(line)
-		#	if(len(self.tokenize(line)) > 0):
-		#		tokens.extend(self.tokenize(line))
-		#dataFile.close()
-		#return tokens
-		return
 	def tokenIsKeyword(self, token):
 		for keyword in self.keywords:
 			if(keyword == token):
