@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import sys
 class commentFSM:
-    debugMode = False
+    debugMode = True
     currentChar = ''
     filename = ''
     depth = 0
@@ -84,8 +84,10 @@ class commentFSM:
         if self.debugMode:
             print "State 6 : "+self.currentChar
         if '/' in self.currentChar:
-            self.stateSeven()
-        else:
+		self.stateSeven()
+        elif '*' in self.currentChar:
+		self.stateSix()
+	else:
             self.stateEight()
         return
 
