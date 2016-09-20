@@ -35,10 +35,10 @@ class commentFSM:
             self.stateThree()
         #Handles multi-line comment
         elif(self.currentChar == '*'):
-            self.stateFour(self.getNextChar())
+            self.stateFour()
         else:
             self.stateFive('/')
-            self.stateFive(inputChar)
+            self.stateFive()
         return
 
     def stateThree(self):
