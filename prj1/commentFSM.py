@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import sys
 class commentFSM:
-    debugMode = True
+    debugMode = False
     currentChar = ''
     filename = ''
     depth = 0
