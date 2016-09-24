@@ -13,7 +13,7 @@ class Lex:
 	specialChars = ['+','!','-','/','*','<','>', ">=", "<=", "==", "=", "!=", ";",",","(",")","[","]","{","}"] 
 	idRegex=r'([a-zA-Z]+)'
 	intRegex=r'^(\d+)$'
-	floatRegex=r'^(\d+\.\d+)([E][+-]?\d+)?'
+	floatRegex=r'^(\d+(\.\d+)?)([E][+-]?\d+)?'
 	def fileFound(self,fileName):
 		try:
 			testFile = open(fileName,"r")
@@ -43,18 +43,11 @@ class Lex:
 			data = re.split(charsPattern,token)
 			tokenList = []
 			finalList = []
-			print "Tok : " + str(data)
-			#print data
-			#for toke in data:
-			#	if(toke != None):
-			#		tokenList.extend(toke)
 			while(None in tokenList):
 				tokenList.remove(None)
 			for tok in tokenList:
 				finalList.extend(tok)
-			print "Final : "+str(finalList)
 		else:
-			print "Val :"+token
 			return token
 		return finalList
 						
@@ -79,7 +72,6 @@ class Lex:
 	def tokenIsFloat(self,token):
 		found = re.match(self.floatRegex, token)
 		if(found):
-			print "Flo: " + str(re.split(self.floatRegex,token))
 			return True
 		return False
 
@@ -97,10 +89,10 @@ class Lex:
 
 	def tokenAnalyzer(self, tokens):
 		tokenString = " ".join(str(token) for token in tokens)
-		tokenTemp = tokenString.split()
+		tokensTemp = tokenString.split()
 		tokenList = []
 		fileData = open("tempTokens","w+")
-		for tempToken in tokenTemp:
+		for tempToken in tokensTemp:
 			fileData.write("Tokens : "+tempToken+"\n")
     			if(self.tokenHasChar(tempToken)):
 				tempTokenList = list(tempToken)
@@ -111,22 +103,17 @@ class Lex:
 						if(holdChars != ""):
 							tokenList.append(holdChars)
 							holdChars = ""
-						#print tempTokenList[counter]
 						tokenList.append(tempTokenList[counter])
 					else:
 						holdChars += tempTokenList[counter]	
 					counter += 1
 				if(holdChars != ""):
 					tokenList.append(holdChars)
-				#print str(counter)+"/"+str(len(tempToken))+":"+holdChars
 			else:
 				tokenList.append(tempToken)
-		#print tokenList
 		tokenObjs = []
 		i = 0
-		#print str(i)+" to "+ str(len(tokenList))
 		while i < len(tokenList):
-			#print str(i)+" to "+ str(len(tokenList))
 			if(tokenList[i] is not None):
 				if(self.tokenIsKeyword(tokenList[i])):
 					tokenObjs.append(Token(tokenList[i], "kw"))
@@ -135,7 +122,23 @@ class Lex:
 				elif(self.tokenIsInt(tokenList[i])):
 					tokenObjs.append(Token(tokenList[i], "number"))
 				elif(self.tokenIsFloat(tokenList[i])):
-					tokenObjs.append(Token(tokenList[i], "float"))
+					if("E" in tokenList[i]):
+						if(i+1 < len(tokenList)):
+							if(self.tokenIsInt(tokenList[i+1])):
+								tokenObjs.append(Token(tokenList[i]+tokenList[i+1], "float"))
+								i += 1
+							elif("-" in tokenList[i+1] or "+" in tokenList[i+1]):
+								if(i+2 < len(tokenList)):
+									if(self.tokenIsInt(tokenList[i+2])):
+										tokenObjs.append(Token(tokenList[i]+tokenList[i+1]+tokenList[i+2], "float"))
+										i += 2
+								else:
+									tokenObjs.append(Token(tokenList[i]+tokenList[i+1], "Error - Float"))
+									i += 1
+							else:
+								tokenObjs.append(Token(tokenList[i], "float"))
+					else:
+						tokenObjs.append(Token(tokenList[i], "float"))
 				elif(self.tokenIsSpecialChar(tokenList[i])):
 					if(tokenList[i] == ">" or tokenList[i] == "<" or "!" in tokenList[i] or tokenList[i] == "="):
 						if((i+1) != len(tokenList)):
@@ -143,12 +146,10 @@ class Lex:
 								if( tokenList[i+1] != "="):
 									tokenObjs.append(Token(tokenList[i], "Error"))
 								else:
-									#print "Tokens : "+tokenList[i]+tokenList[i+1]
 									i += 1
 									tokenObjs.append(Token("!=","!="))
 							elif(tokenList[i] == "=" or tokenList[i] == "<" or tokenList[i] == ">"):
 								if(tokenList[i+1] == "="):
-									#print "Tokens : "+tokenList[i]+tokenList[i+1]
     									msg = tokenList[i] + tokenList[i+1]
 									tokenObjs.append(Token(msg, msg))
 									i += 1
