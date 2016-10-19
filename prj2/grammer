@@ -11,7 +11,7 @@ ParamListPr -> , Param ParamListPr | EPSILON
 Param -> TypeSpecifier id | TypeSpecifier id [ ]
 CmpdStatement -> { LocalDeclaration StatementList }
 LocalDeclaration -> VarDeclaration LocalDeclaration | EPSILON
-StatementList -> Statement StateList | EPSILON
+StatementList -> Statement StatementList | EPSILON
 Statement -> ExpressionStatement | CmpdStatement | SelectionStatement | IterationStatement | ReturnStatement
 ExpressionStatement -> Expression ; | ;
 SelectionStatement -> if ( Expression ) Statement | if ( Expression ) Statement else Statement
