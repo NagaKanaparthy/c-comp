@@ -7,7 +7,7 @@ from rule import SubRule
 outputFileName = sys.argv[1]
 #read in tokens
 def readTokens():
-    return tokens = open("token.form","r").read().split()
+    return open("token.form","r").read().split()
 #read in grammer
 #generate parser with name from args
 print(str(readTokens()))
