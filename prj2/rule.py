@@ -5,7 +5,8 @@ class RuleDictionary:
         self.rules = {}
     def addRule(self, ruleTokenString):
         tempRule = Rule(ruleTokenString)
-        #Check if rule is within dict. True then add subrule and
+        #Check if rule is within dict. True then add subrule and false create
+        #rule with subrule
         if(tempRule)
     def rulecount(self):
         return len(self.rules)
