@@ -20,6 +20,7 @@ delimited.
 
 1. Look at the **grammer.form** file for an example grammer.
   * **Empty** is the **@** symbol
+  * **$** is reserved as a end of input symbol (You can change in generator.py)
 2. Look at the **token.form** file for an example file with kw
 3. Have your lex analyzer do the token handling you can use the **token.py**
 file to get an idea of how your tokens should look like.
