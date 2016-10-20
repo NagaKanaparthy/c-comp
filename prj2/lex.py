@@ -168,7 +168,7 @@ class Lex:
 		print "token	|type	"
 		print "-----------------"
 		for token in tokens:
-			row = token.getValue() + "	|" + token.getType()
+			row = token.toString()
 			fileTokens.write(row+"\n")
 			print row
 		return

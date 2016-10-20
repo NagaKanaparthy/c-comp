@@ -1,0 +1,2 @@
+#!/bin/sh
+python lexRunner.py "$@" | python cminus.py
