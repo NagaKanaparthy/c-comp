@@ -92,9 +92,9 @@ After my tool generated this,
 |AddOp|+|+|
 |AddOp|-|-|
 |Term|Factor TermPr|( num id|
-|TermPr|MulOp Factor TermPr|* /|
+|TermPr|MulOp Factor TermPr|\* /|
 |TermPr|@|+ - >= <= > < == != , ) ;|
-|MulOp|*|*|
+|MulOp|\*|\*|
 |MulOp|/|/|
 |Factor|( Expression )|(|
 |Factor|Var|id|
