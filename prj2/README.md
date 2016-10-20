@@ -36,6 +36,7 @@ After my tool generated this,
   all I did was add accepts and fixed conflict functions.
 
 ### Rule Table
+
 |parentRule|subRule|first and follow(predict)|
 |--|--|--|
 |Program|DeclarationList|int float void|
