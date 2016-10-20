@@ -38,7 +38,7 @@ After my tool generated this,
 ### Rule Table
 
 |parentRule|subRule|first and follow(predict)|
-|--|--|--|
+|:---:|:--:|:--:|
 |Program|DeclarationList|int float void|
 |DeclarationList|Declaration DeclarationListPr|int float void|
 |DeclarationListPr|Declaration DeclarationListPr|int float void|
