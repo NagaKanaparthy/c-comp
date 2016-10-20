@@ -1,12 +1,6 @@
 #!usr/bin/python
 class Token:
-	def __init__(self, tokenTypeVal):
-		self.tokenType = tokenTypeVal
-		#self.depth = depthVal
-	def __init__(self, val, tokenTypeVal):
-		self.value = val
-		self.tokenType = tokenTypeVal
-	def __init__(self, val, tokenTypeVal,depthVal):
+	def __init__(self, val, tokenTypeVal,depthVal=0):
 		self.value = val
 		self.tokenType = tokenTypeVal
 		self.depth = depthVal
