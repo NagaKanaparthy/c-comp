@@ -1,0 +1,68 @@
+Program|DeclarationList|int float void
+DeclarationList|Declaration DeclarationListPr|int float void
+DeclarationListPr|Declaration DeclarationListPr|int float void
+DeclarationListPr|@|$
+Declaration|VarDeclaration|int float void
+Declaration|FunDeclaration|int float void
+VarDeclaration|TypeSpecifier id|int float void
+VarDeclaration|TypeSpecifier [ num ]|int float void
+TypeSpecifier|int|int
+TypeSpecifier|float|float
+TypeSpecifier|void|void
+FunDeclaration|TypeSpecifier id ( Params ) CmpdStatement|int float void
+Params|ParamList|int float void
+Params|void|void
+ParamList|Param ParamListPr|int float void
+ParamListPr|, Param ParamListPr|,
+ParamListPr|@|)
+Param|TypeSpecifier id|int float void
+Param|TypeSpecifier id [ ]|int float void
+CmpdStatement|{ LocalDeclaration StatementList }|{
+LocalDeclaration|VarDeclaration LocalDeclaration|int float void
+LocalDeclaration|@|; id ( num if return { while
+StatementList|Statement StatementList|; id ( num if return { while
+StatementList|@|}
+Statement|ExpressionStatement|; id ( num
+Statement|CmpdStatement|{
+Statement|SelectionStatement|if
+Statement|IterationStatement|while
+Statement|ReturnStatement|return
+ExpressionStatement|Expression ;|id ( num
+ExpressionStatement|;|;
+SelectionStatement|if ( Expression ) Statement|if
+SelectionStatement|if ( Expression ) Statement else Statement|if
+IterationStatement|while ( Expression ) Statement|while
+ReturnStatement|return ;|return
+ReturnStatement|return Expression ;|return
+Expression|Var = Expression|id
+Expression|SimpleExpression|( num id
+Var|id|id
+Var|id [ Expression ]|id
+SimpleExpression|AddExpression RelOp AddExpression|( num id
+RelOp|>=|>=
+RelOp|<=|<=
+RelOp|>|>
+RelOp|<|<
+RelOp|==|==
+RelOp|!=|!=
+AddExpression|Term AddExpressionPr|( num id
+AddExpressionPr|AddOp Term AddExpressionPr|+ -
+AddExpressionPr|@|>= <= > < == != , ) ;
+AddOp|+|+
+AddOp|-|-
+Term|Factor TermPr|( num id
+TermPr|MulOp Factor TermPr|* /
+TermPr|@|+ - >= <= > < == != , ) ;
+MulOp|*|*
+MulOp|/|/
+Factor|( Expression )|(
+Factor|Var|id
+Factor|Call|id
+Factor|num|num
+Call|id ( Args )|id
+Args|ArgsList|id ( num ,
+Args|@|)
+ArgsList|Expression|id ( num
+ArgsList|ArgsListPr|,
+ArgsListPr|, Expression ArgsListPr|,
+ArgsListPr|@|)
