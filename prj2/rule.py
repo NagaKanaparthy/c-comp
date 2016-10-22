@@ -26,7 +26,7 @@ class RuleDictionary:
 				else:
 					result+="\t\telif("+sRule.getConditionalStatment()+"):\n"
 					result+=self.parseRule(sRule.rule)
-		result += "\t\telse:\n\t\t\tprint(\"reject\")\n\t\t\tsys.exit(0)\n"
+		result += "\t\telse:\n\t\t\tprint(\"reject at "+rule.name+" with token :\"+self.currentToken.getType())\n\t\t\tsys.exit(0)\n"
 		return result
 	def parseRule(self,ruleString):
 		string = ""
@@ -37,7 +37,7 @@ class RuleDictionary:
 			elif(self.isNonTerminal(tok)):
 				string += "\t\t\tself."+tok+"()\n"
 			else:
-				string += "\t\t\tif(self.currentToken.getType()==\""+tok+"\"):\n"
+				string += "\t\t\tif(self.currentToken.getType().strip()==\""+tok+"\"):\n"
 				string += "\t\t\t\tself.nextToken()\n"
 				string += "\t\t\telse: print(\"error\")\n"
 		return string
@@ -93,10 +93,10 @@ class SubRule:
 		first = True
 		for token in self.predicitTokens:
 			if(first):
-				string+="self.currentToken.getType()==\""+token+"\""
+				string+="self.currentToken.getType().strip()==\""+token+"\""
 				first = False
 			else:
-				string+=" or self.currentToken.getType()==\""+token+"\""
+				string+=" or self.currentToken.getType().strip()==\""+token+"\""
 		return string
 	def toString(self):
 		return self.rule+"|"+str(self.predicitTokens)

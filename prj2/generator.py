@@ -25,11 +25,12 @@ constructer  = "\tdef __init__(self, tokenList):\n"
 constructer += "\t\ttokenList.append(Token(\"$\",\"$\"))\n"
 constructer += "\t\tself.tokenList = tokenList\n"
 constructer += "\t\tself.currentTokenNumber = 0\n"
+constructer += "\t\tself.currentToken=tokenList[0]\n"
 nextToken =   "\tdef nextToken(self):\n"
 nextToken +=   "\t\ttemp =self.tokenList[self.currentTokenNumber]\n"
-nextToken +=   "\t\tif(self.currentTokenNumber < len(tokenList)):\n"
+nextToken +=   "\t\tif(self.currentTokenNumber < len(self.tokenList)):\n"
 nextToken +=   "\t\t\tself.currentTokenNumber += 1\n"
-nextToken +=   "\t\treturn temp\n"
+nextToken +=   "\t\tself.currentToken = temp\n"
 string = header + constructer + nextToken + string
 #generate print to file
 fileOutput = open(outputFileName+".py",'w')

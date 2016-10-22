@@ -116,29 +116,29 @@ class Lex:
 		while i < len(tokenList):
 			if(tokenList[i] is not None):
 				if(self.tokenIsKeyword(tokenList[i])):
-					tokenObjs.append(Token(tokenList[i], "kw"))
+					tokenObjs.append(Token(tokenList[i], tokenList[i]))
 				elif(self.tokenIsId(tokenList[i])):
 					tokenObjs.append(Token(tokenList[i], "id"))
 				elif(self.tokenIsInt(tokenList[i])):
-					tokenObjs.append(Token(tokenList[i], "number"))
+					tokenObjs.append(Token(tokenList[i], "num"))
 				elif(self.tokenIsFloat(tokenList[i])):
 					if("E" in tokenList[i]):
 						if(i+1 < len(tokenList)):
 							if(self.tokenIsInt(tokenList[i+1])):
-								tokenObjs.append(Token(tokenList[i]+tokenList[i+1], "float"))
+								tokenObjs.append(Token(tokenList[i]+tokenList[i+1], "num"))
 								i += 1
 							elif("-" in tokenList[i+1] or "+" in tokenList[i+1]):
 								if(i+2 < len(tokenList)):
 									if(self.tokenIsInt(tokenList[i+2])):
-										tokenObjs.append(Token(tokenList[i]+tokenList[i+1]+tokenList[i+2], "float"))
+										tokenObjs.append(Token(tokenList[i]+tokenList[i+1]+tokenList[i+2], "num"))
 										i += 2
 								else:
 									tokenObjs.append(Token(tokenList[i]+tokenList[i+1], "Error - Float"))
 									i += 1
 							else:
-								tokenObjs.append(Token(tokenList[i], "float"))
+								tokenObjs.append(Token(tokenList[i], "num"))
 					else:
-						tokenObjs.append(Token(tokenList[i], "float"))
+						tokenObjs.append(Token(tokenList[i], "num"))
 				elif(self.tokenIsSpecialChar(tokenList[i])):
 					if(tokenList[i] == ">" or tokenList[i] == "<" or "!" in tokenList[i] or tokenList[i] == "="):
 						if((i+1) != len(tokenList)):
