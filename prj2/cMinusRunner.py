@@ -11,3 +11,5 @@ for line in sys.stdin:
 		temp = Token("","")
 		temp.parseLine(line)
 		tokens.append(temp)
+for token in tokens:
+	print(token.toString())
