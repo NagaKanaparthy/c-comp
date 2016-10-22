@@ -37,7 +37,7 @@ class RuleDictionary:
 			elif(self.isNonTerminal(tok)):
 				string += "\n\t\t\tself."+tok+"()\n\n"
 			else:
-				string += "\t\t\tif(self.currentToken==\""+tok+"\")\n"
+				string += "\t\t\tif(self.currentToken.getType()==\""+tok+"\")\n"
 				string += "\t\t\t\tself.nextToken()\n"
 				string += "\t\t\telse:\n"
 				string += "\t\t\t\tprint(\"reject\")\n"
