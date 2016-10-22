@@ -3,7 +3,7 @@ import itertools
 import sys
 import re
 
-from token import Token
+from to import Token
 from commentFSM import commentFSM
 
 #functions

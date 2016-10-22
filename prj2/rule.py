@@ -1,5 +1,5 @@
 import sys
-from token import Token
+from to import Token
 class RuleDictionary:
 	def __init__(self,rulesList):
 		self.rulesDictionary = {}
@@ -19,16 +19,16 @@ class RuleDictionary:
 			for sRule in rule.subRules.values():
 				if(first):
 					result+="\t\tif("+sRule.getConditionalStatment()+"):\n"
-					result+=self.parseRule(sRule.rule)
+					result+=self.parseRule(sRule.rule,rule)
 					#if NonTerminal then make function call
 					#else if statements with nextTokenUpdate
 					first = False
 				else:
 					result+="\t\telif("+sRule.getConditionalStatment()+"):\n"
-					result+=self.parseRule(sRule.rule)
+					result+=self.parseRule(sRule.rule,rule)
 		result += "\t\telse:\n\t\t\tprint(\"reject at "+rule.name+" with token :\"+self.currentToken.getType()+str(self.currentTokenNumber))\n\t\t\tsys.exit(0)\n"
 		return result
-	def parseRule(self,ruleString):
+	def parseRule(self,ruleString,rule):
 		string = ""
 		tokens = ruleString.split()
 		for tok in tokens:
@@ -39,7 +39,7 @@ class RuleDictionary:
 			else:
 				string += "\t\t\tif(self.currentToken.getType().strip()==\""+tok+"\"):\n"
 				string += "\t\t\t\tself.nextToken()\n"
-				string += "\t\t\telse: print(\"error\"+self.currentToken.getValue().strip())\n"
+				string += "\t\t\telse: print(\"error \"+self.currentToken.getValue().strip()+\" "+rule.name+"\")\n"
 		return string
 	def isNonTerminal(self,token):
 		if(self.rulesDictionary.get(token) != None):

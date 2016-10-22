@@ -1,17 +1,15 @@
 import sys
+from to import Token
+from lex import Lex
 from cminus import cminus
-from token import Token
-#get Tokens from sys.in
-tokens = []
-header = 2
-for line in sys.stdin:
-	if(header > 0):
-		header -= 1
-	else:
-		temp = Token("","")
-		temp.parseLine(line)
-		tokens.append(temp)
+# main function
+fileName = sys.argv[1]
+lexer = Lex()
+if (lexer.fileFound(fileName)):
+        lexer.removeComments(fileName)
+	serializedTokens = lexer.getTokens()
+	tokens = lexer.tokenAnalyzer(serializedTokens)
 parser = cminus(tokens)
 #parser.nextToken()
 parser.Program()
-print(accept) 
+print('accept')

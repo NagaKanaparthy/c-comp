@@ -18,7 +18,7 @@ FunDeclaration|TypeSpecifier id ( Params ) CmpdStatement|int float void
 Params|ParamList|int float
 Params|void|void
 ParamList|Param ParamListPr|int float
-ParamListPr| Param ParamListPr|,
+ParamListPr|, Param ParamListPr|,
 ParamListPr|@|)
 Param|DataTypeSpecifier id ParamPr|int float
 ParamPr|[ ]|[
@@ -44,7 +44,7 @@ ReturnStatementPr|Expression ;|id
 ReturnStatementPr|;|;
 Expression|id ExpressionPr|id
 ExpressionPr|VarPr = Expression|, =
-ExpressionPr|FactorPr SimpleExpression|(  * / >= <= > < == != + -
+ExpressionPr|FactorPr SimpleExpression|; (  * / >= <= > < == != + -
 Var|id VarPr|id
 VarPr|[ Expression ]|[
 VarPr|@|= * / >= <= > < == != + -
@@ -57,12 +57,12 @@ RelOp|==|==
 RelOp|!=|!=
 AddExpression|Term AddExpressionPr|( id num
 AddExpressionPr|AddOp Term AddExpressionPr|+ -
-AddExpressionPr|@|>= <= > < == !=
+AddExpressionPr|@|>= <= > < == != )
 AddOp|+|+
 AddOp|-|-
 Term|Factor TermPr|( id num
 TermPr|MulOp Factor TermPr|* /
-TermPr|@|>= <= > < == != + -
+TermPr|@|>= <= > < == != + - )
 MulOp|*|*
 MulOp|/|/
 Factor|( Expression )|(

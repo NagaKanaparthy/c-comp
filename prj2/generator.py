@@ -1,5 +1,5 @@
 import sys
-from token import Token
+from to import Token
 from rule import RuleDictionary
 from rule import Rule
 from rule import SubRule
@@ -19,18 +19,17 @@ for rule in ruleDict.rulesDictionary.values():
 	else:
 		print(rule.name)
 #gen header
-imports = "import sys\nfrom token import Token\nfrom rule import RuleDictionary"
-header = imports + "\nclass "+outputFileName+":\n"
+imports = "import sys\nfrom to import Token\n"
+header = imports + "class "+outputFileName+":\n"
 constructer  = "\tdef __init__(self, tokenList):\n"
 constructer += "\t\ttokenList.append(Token(\"$\",\"$\"))\n"
 constructer += "\t\tself.tokenList = tokenList\n"
 constructer += "\t\tself.currentTokenNumber = 0\n"
 constructer += "\t\tself.currentToken=tokenList[0]\n"
 nextToken =   "\tdef nextToken(self):\n"
-nextToken +=   "\t\ttemp =self.tokenList[self.currentTokenNumber]\n"
 nextToken +=   "\t\tif(self.currentTokenNumber < len(self.tokenList)):\n"
 nextToken +=   "\t\t\tself.currentTokenNumber += 1\n"
-nextToken +=   "\t\tself.currentToken = temp\n"
+nextToken +=   "\t\tself.currentToken = self.tokenList[self.currentTokenNumber]\n"
 string = header + constructer + nextToken + string
 #generate print to file
 fileOutput = open(outputFileName+".py",'w')

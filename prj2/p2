@@ -1,2 +1,2 @@
 #!/bin/sh
-python lexRunner.py "$@" | python cMinusRunner.py
+python cMinusRunner.py "$@"
