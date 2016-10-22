@@ -29,7 +29,7 @@ class cminus.py
 
 			self.VarPr()
 
-			if(self.currentToken=="=")
+			if(self.currentToken.getType()=="=")
 				self.nextToken()
 			else:
 				print("reject")
@@ -54,14 +54,14 @@ class cminus.py
 
 			self.Expression()
 
-			if(self.currentToken==";")
+			if(self.currentToken.getType()==";")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken==";"):
 
-			if(self.currentToken==";")
+			if(self.currentToken.getType()==";")
 				self.nextToken()
 			else:
 				print("reject")
@@ -90,7 +90,7 @@ class cminus.py
 
 			self.DataTypeSpecifier()
 
-			if(self.currentToken=="id")
+			if(self.currentToken.getType()=="id")
 				self.nextToken()
 			else:
 				print("reject")
@@ -113,7 +113,7 @@ class cminus.py
 	def Params(self):
 		if(self.currentToken=="void"):
 
-			if(self.currentToken=="void")
+			if(self.currentToken.getType()=="void")
 				self.nextToken()
 			else:
 				print("reject")
@@ -158,7 +158,7 @@ class cminus.py
 	def Factor(self):
 		if(self.currentToken=="("):
 
-			if(self.currentToken=="(")
+			if(self.currentToken.getType()=="(")
 				self.nextToken()
 			else:
 				print("reject")
@@ -166,21 +166,21 @@ class cminus.py
 
 			self.Expression()
 
-			if(self.currentToken==")")
+			if(self.currentToken.getType()==")")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="num"):
 
-			if(self.currentToken=="num")
+			if(self.currentToken.getType()=="num")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="id"):
 
-			if(self.currentToken=="id")
+			if(self.currentToken.getType()=="id")
 				self.nextToken()
 			else:
 				print("reject")
@@ -194,7 +194,7 @@ class cminus.py
 	def Var(self):
 		if(self.currentToken=="id"):
 
-			if(self.currentToken=="id")
+			if(self.currentToken.getType()=="id")
 				self.nextToken()
 			else:
 				print("reject")
@@ -208,14 +208,14 @@ class cminus.py
 	def DataTypeSpecifier(self):
 		if(self.currentToken=="int"):
 
-			if(self.currentToken=="int")
+			if(self.currentToken.getType()=="int")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="float"):
 
-			if(self.currentToken=="float")
+			if(self.currentToken.getType()=="float")
 				self.nextToken()
 			else:
 				print("reject")
@@ -240,21 +240,21 @@ class cminus.py
 	def TypeSpecifier(self):
 		if(self.currentToken=="int"):
 
-			if(self.currentToken=="int")
+			if(self.currentToken.getType()=="int")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="void"):
 
-			if(self.currentToken=="void")
+			if(self.currentToken.getType()=="void")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="float"):
 
-			if(self.currentToken=="float")
+			if(self.currentToken.getType()=="float")
 				self.nextToken()
 			else:
 				print("reject")
@@ -280,7 +280,7 @@ class cminus.py
 	def CmpdStatement(self):
 		if(self.currentToken=="{"):
 
-			if(self.currentToken=="{")
+			if(self.currentToken.getType()=="{")
 				self.nextToken()
 			else:
 				print("reject")
@@ -291,7 +291,7 @@ class cminus.py
 
 			self.StatementList()
 
-			if(self.currentToken=="}")
+			if(self.currentToken.getType()=="}")
 				self.nextToken()
 			else:
 				print("reject")
@@ -317,12 +317,12 @@ class cminus.py
 			return
 		elif(self.currentToken=="["):
 
-			if(self.currentToken=="[")
+			if(self.currentToken.getType()=="[")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="]")
+			if(self.currentToken.getType()=="]")
 				self.nextToken()
 			else:
 				print("reject")
@@ -345,14 +345,14 @@ class cminus.py
 	def MulOp(self):
 		if(self.currentToken=="*"):
 
-			if(self.currentToken=="*")
+			if(self.currentToken.getType()=="*")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="/"):
 
-			if(self.currentToken=="/")
+			if(self.currentToken.getType()=="/")
 				self.nextToken()
 			else:
 				print("reject")
@@ -366,7 +366,7 @@ class cminus.py
 
 			self.TypeSpecifier()
 
-			if(self.currentToken=="id")
+			if(self.currentToken.getType()=="id")
 				self.nextToken()
 			else:
 				print("reject")
@@ -401,7 +401,7 @@ class cminus.py
 			return
 		elif(self.currentToken=="else"):
 
-			if(self.currentToken=="else")
+			if(self.currentToken.getType()=="else")
 				self.nextToken()
 			else:
 				print("reject")
@@ -415,12 +415,12 @@ class cminus.py
 	def SelectionStatement(self):
 		if(self.currentToken=="if"):
 
-			if(self.currentToken=="if")
+			if(self.currentToken.getType()=="if")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="(")
+			if(self.currentToken.getType()=="(")
 				self.nextToken()
 			else:
 				print("reject")
@@ -428,7 +428,7 @@ class cminus.py
 
 			self.Expression()
 
-			if(self.currentToken==")")
+			if(self.currentToken.getType()==")")
 				self.nextToken()
 			else:
 				print("reject")
@@ -445,14 +445,14 @@ class cminus.py
 	def AddOp(self):
 		if(self.currentToken=="+"):
 
-			if(self.currentToken=="+")
+			if(self.currentToken.getType()=="+")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="-"):
 
-			if(self.currentToken=="-")
+			if(self.currentToken.getType()=="-")
 				self.nextToken()
 			else:
 				print("reject")
@@ -478,7 +478,7 @@ class cminus.py
 			return
 		elif(self.currentToken==","):
 
-			if(self.currentToken==",")
+			if(self.currentToken.getType()==",")
 				self.nextToken()
 			else:
 				print("reject")
@@ -498,14 +498,14 @@ class cminus.py
 
 			self.Expression()
 
-			if(self.currentToken==";")
+			if(self.currentToken.getType()==";")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken==";"):
 
-			if(self.currentToken==";")
+			if(self.currentToken.getType()==";")
 				self.nextToken()
 			else:
 				print("reject")
@@ -521,7 +521,7 @@ class cminus.py
 
 		elif(self.currentToken=="("):
 
-			if(self.currentToken=="(")
+			if(self.currentToken.getType()=="(")
 				self.nextToken()
 			else:
 				print("reject")
@@ -529,7 +529,7 @@ class cminus.py
 
 			self.Args()
 
-			if(self.currentToken==")")
+			if(self.currentToken.getType()==")")
 				self.nextToken()
 			else:
 				print("reject")
@@ -579,7 +579,7 @@ class cminus.py
 	def Expression(self):
 		if(self.currentToken=="id"):
 
-			if(self.currentToken=="id")
+			if(self.currentToken.getType()=="id")
 				self.nextToken()
 			else:
 				print("reject")
@@ -596,12 +596,12 @@ class cminus.py
 
 			self.TypeSpecifier()
 
-			if(self.currentToken=="id")
+			if(self.currentToken.getType()=="id")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="(")
+			if(self.currentToken.getType()=="(")
 				self.nextToken()
 			else:
 				print("reject")
@@ -609,7 +609,7 @@ class cminus.py
 
 			self.Params()
 
-			if(self.currentToken==")")
+			if(self.currentToken.getType()==")")
 				self.nextToken()
 			else:
 				print("reject")
@@ -623,42 +623,42 @@ class cminus.py
 	def RelOp(self):
 		if(self.currentToken==">="):
 
-			if(self.currentToken==">=")
+			if(self.currentToken.getType()==">=")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="=="):
 
-			if(self.currentToken=="==")
+			if(self.currentToken.getType()=="==")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="<="):
 
-			if(self.currentToken=="<=")
+			if(self.currentToken.getType()=="<=")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="!="):
 
-			if(self.currentToken=="!=")
+			if(self.currentToken.getType()=="!=")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="<"):
 
-			if(self.currentToken=="<")
+			if(self.currentToken.getType()=="<")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken==">"):
 
-			if(self.currentToken==">")
+			if(self.currentToken.getType()==">")
 				self.nextToken()
 			else:
 				print("reject")
@@ -669,24 +669,24 @@ class cminus.py
 	def VarDeclarationPr(self):
 		if(self.currentToken=="["):
 
-			if(self.currentToken=="[")
+			if(self.currentToken.getType()=="[")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="num")
+			if(self.currentToken.getType()=="num")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="]")
+			if(self.currentToken.getType()=="]")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
 		elif(self.currentToken=="id"):
 
-			if(self.currentToken=="id")
+			if(self.currentToken.getType()=="id")
 				self.nextToken()
 			else:
 				print("reject")
@@ -742,7 +742,7 @@ class cminus.py
 	def DeclarationPr(self):
 		if(self.currentToken=="("):
 
-			if(self.currentToken=="(")
+			if(self.currentToken.getType()=="(")
 				self.nextToken()
 			else:
 				print("reject")
@@ -750,7 +750,7 @@ class cminus.py
 
 			self.Params()
 
-			if(self.currentToken==")")
+			if(self.currentToken.getType()==")")
 				self.nextToken()
 			else:
 				print("reject")
@@ -760,17 +760,17 @@ class cminus.py
 
 		elif(self.currentToken=="["):
 
-			if(self.currentToken=="[")
+			if(self.currentToken.getType()=="[")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="num")
+			if(self.currentToken.getType()=="num")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="]")
+			if(self.currentToken.getType()=="]")
 				self.nextToken()
 			else:
 				print("reject")
@@ -787,7 +787,7 @@ class cminus.py
 			return
 		elif(self.currentToken=="["):
 
-			if(self.currentToken=="[")
+			if(self.currentToken.getType()=="[")
 				self.nextToken()
 			else:
 				print("reject")
@@ -795,7 +795,7 @@ class cminus.py
 
 			self.Expression()
 
-			if(self.currentToken=="]")
+			if(self.currentToken.getType()=="]")
 				self.nextToken()
 			else:
 				print("reject")
@@ -806,12 +806,12 @@ class cminus.py
 	def Call(self):
 		if(self.currentToken=="id"):
 
-			if(self.currentToken=="id")
+			if(self.currentToken.getType()=="id")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="(")
+			if(self.currentToken.getType()=="(")
 				self.nextToken()
 			else:
 				print("reject")
@@ -819,7 +819,7 @@ class cminus.py
 
 			self.Args()
 
-			if(self.currentToken==")")
+			if(self.currentToken.getType()==")")
 				self.nextToken()
 			else:
 				print("reject")
@@ -830,7 +830,7 @@ class cminus.py
 	def ReturnStatement(self):
 		if(self.currentToken=="return"):
 
-			if(self.currentToken=="return")
+			if(self.currentToken.getType()=="return")
 				self.nextToken()
 			else:
 				print("reject")
@@ -844,12 +844,12 @@ class cminus.py
 	def IterationStatement(self):
 		if(self.currentToken=="while"):
 
-			if(self.currentToken=="while")
+			if(self.currentToken.getType()=="while")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-			if(self.currentToken=="(")
+			if(self.currentToken.getType()=="(")
 				self.nextToken()
 			else:
 				print("reject")
@@ -857,7 +857,7 @@ class cminus.py
 
 			self.Expression()
 
-			if(self.currentToken==")")
+			if(self.currentToken.getType()==")")
 				self.nextToken()
 			else:
 				print("reject")
