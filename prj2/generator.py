@@ -20,7 +20,7 @@ for rule in ruleDict.rulesDictionary.values():
 		print(rule.name)
 #gen header
 imports = "import sys\nfrom token import Token\nfrom rule import RuleDictionary"
-header = imports + "\nclass "+outputFileName+"\n"
+header = imports + "\nclass "+outputFileName+":\n"
 constructer  = "\tdef __init__(self, tokenList):\n"
 constructer += "\t\ttokenList.append(Token(\"$\",\"$\"))\n"
 constructer += "\t\tself.tokenList = tokenList\n"
@@ -32,6 +32,6 @@ nextToken +=   "\t\t\tself.currentTokenNumber += 1\n"
 nextToken +=   "\t\treturn temp\n"
 string = header + constructer + nextToken + string
 #generate print to file
-fileOutput = open(outputFileName,'w')
+fileOutput = open(outputFileName+".py",'w')
 fileOutput.write(string)
 fileOutput.close()

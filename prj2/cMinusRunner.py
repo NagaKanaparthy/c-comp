@@ -1,5 +1,5 @@
 import sys
-from cminus import cMinus
+from cminus import cminus
 from token import Token
 #get Tokens from sys.in
 tokens = []
@@ -11,7 +11,7 @@ for line in sys.stdin:
 		temp = Token("","")
 		temp.parseLine(line)
 		tokens.append(temp)
-parser = cMinus(tokens)
+parser = cminus(tokens)
 parser.nextToken()
 parser.Program()
 print(accept) 

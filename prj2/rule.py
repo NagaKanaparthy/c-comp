@@ -18,13 +18,13 @@ class RuleDictionary:
 			first = True
 			for sRule in rule.subRules.values():
 				if(first):
-					result+="\t\tif("+sRule.getConditionalStatment()+"):\n\n"
+					result+="\t\tif("+sRule.getConditionalStatment()+"):\n"
 					result+=self.parseRule(sRule.rule)
 					#if NonTerminal then make function call
 					#else if statements with nextTokenUpdate
 					first = False
 				else:
-					result+="\t\telif("+sRule.getConditionalStatment()+"):\n\n"
+					result+="\t\telif("+sRule.getConditionalStatment()+"):\n"
 					result+=self.parseRule(sRule.rule)
 		result += "\t\telse:\n\t\t\tprint(\"reject\")\n\t\t\tsys.exit(0)\n"
 		return result
@@ -35,13 +35,11 @@ class RuleDictionary:
 			if('@' == tok):
 				string += "\t\t\treturn\n"
 			elif(self.isNonTerminal(tok)):
-				string += "\n\t\t\tself."+tok+"()\n\n"
+				string += "\t\t\tself."+tok+"()\n"
 			else:
 				string += "\t\t\tif(self.currentToken.getType()==\""+tok+"\"):\n"
 				string += "\t\t\t\tself.nextToken()\n"
-				string += "\t\t\telse:\n"
-				string += "\t\t\t\tprint(\"reject\")\n"
-				string += "\t\t\t\tsys.exit(0)\n"
+				string += "\t\t\telse: print(\"error\")\n"
 		return string
 	def isNonTerminal(self,token):
 		if(self.rulesDictionary.get(token) != None):
