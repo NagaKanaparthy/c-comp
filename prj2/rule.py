@@ -26,7 +26,7 @@ class RuleDictionary:
 				else:
 					result+="\t\telif("+sRule.getConditionalStatment()+"):\n"
 					result+=self.parseRule(sRule.rule)
-		result += "\t\telse:\n\t\t\tprint(\"reject at "+rule.name+" with token :\"+self.currentToken.getType())\n\t\t\tsys.exit(0)\n"
+		result += "\t\telse:\n\t\t\tprint(\"reject at "+rule.name+" with token :\"+self.currentToken.getType()+str(self.currentTokenNumber))\n\t\t\tsys.exit(0)\n"
 		return result
 	def parseRule(self,ruleString):
 		string = ""
@@ -39,7 +39,7 @@ class RuleDictionary:
 			else:
 				string += "\t\t\tif(self.currentToken.getType().strip()==\""+tok+"\"):\n"
 				string += "\t\t\t\tself.nextToken()\n"
-				string += "\t\t\telse: print(\"error\")\n"
+				string += "\t\t\telse: print(\"error\"+self.currentToken.getValue().strip())\n"
 		return string
 	def isNonTerminal(self,token):
 		if(self.rulesDictionary.get(token) != None):

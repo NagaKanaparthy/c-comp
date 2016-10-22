@@ -12,6 +12,6 @@ for line in sys.stdin:
 		temp.parseLine(line)
 		tokens.append(temp)
 parser = cminus(tokens)
-parser.nextToken()
+#parser.nextToken()
 parser.Program()
 print(accept) 
