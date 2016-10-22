@@ -26,7 +26,7 @@ class RuleDictionary:
 				else:
 					result+="\t\telif("+sRule.getConditionalStatment()+"):\n\n"
 					result+=self.parseRule(sRule.rule)
-		result += "\t\telse:\n\t\t\tprint(\"reject\")\n"
+		result += "\t\telse:\n\t\t\tprint(\"reject\")\n\t\t\tsys.exit(0)\n"
 		return result
 	def parseRule(self,ruleString):
 		string = ""
@@ -39,13 +39,14 @@ class RuleDictionary:
 			else:
 				string += "\t\t\tif(self.currentToken==\""+tok+"\")\n"
 				string += "\t\t\t\tself.nextToken()\n"
-				string += "\t\t\telse:\n\t\t\t\tprint(\"reject\")\n"
+				string += "\t\t\telse:\n"
+				string += "\t\t\t\tprint(\"reject\")\n"
+				string += "\t\t\t\tsys.exit(0)\n"
 		return string
 	def isNonTerminal(self,token):
 		if(self.rulesDictionary.get(token) != None):
 			return True
 		return False
-		#print(str(tokens))
 	def toString(self):
 		string = ""
 		for rule in self.rulesDictionary.values():
@@ -112,10 +113,21 @@ with open("grammer.form", "r") as ins:
     for line in ins:
         rules.append(Rule(line))
 #Create Dictionary
+string =""
 ruleDict = RuleDictionary(rules)
 for rule in ruleDict.rulesDictionary.values():
-	if(rule.conflict == True):
-		print(rule.name+" - "+rule.getConflicts())
-#print(ruleDict.toString())
-#generate parser with name from args
-#tokenList = readTokenDictionary()
+	if(rule.conflict == False):
+		string += ruleDict.generateFunction(rule)
+	else:
+		print(rule.name)
+#gen header
+imports = "import sys\nfrom token import Token\nfrom rule import RuleDictionary"
+header = imports + "\nclass "+outputFileName+"\n"
+constructer  = "\tdef __init__(self, tokenList):\n"
+constructer += "\t\ttokenList.append(Token(\"$\",\"$\"))\n"
+constructer += "\t\tself.tokenList = tokenList\n"
+string = header + constructer + string
+#generate print to file
+fileOutput = open(outputFileName,'w')
+fileOutput.write(string)
+fileOutput.close()

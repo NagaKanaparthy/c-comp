@@ -2,67 +2,78 @@ Program|DeclarationList|int float void
 DeclarationList|Declaration DeclarationListPr|int float void
 DeclarationListPr|Declaration DeclarationListPr|int float void
 DeclarationListPr|@|$
-Declaration|VarDeclaration|int float void
-Declaration|FunDeclaration|int float void
-VarDeclaration|TypeSpecifier id|int float void
-VarDeclaration|TypeSpecifier [ num ]|int float void
+Declaration|TypeSpecifier id DeclarationPr|int float void
+DeclarationPr|( Params ) CmpdStatement|(
+DeclarationPr|[ num ]|[
+DeclarationPr|@|int float void $
+VarDeclaration|TypeSpecifier VarDeclarationPr|int float void
+VarDeclarationPr|[ num ]|[
+VarDeclarationPr|id|id
+DataTypeSpecifier|int|int
+DataTypeSpecifier|float|float
 TypeSpecifier|int|int
 TypeSpecifier|float|float
 TypeSpecifier|void|void
 FunDeclaration|TypeSpecifier id ( Params ) CmpdStatement|int float void
-Params|ParamList|int float void
+Params|ParamList|int float
 Params|void|void
-ParamList|Param ParamListPr|int float void
-ParamListPr|, Param ParamListPr|,
+ParamList|Param ParamListPr|int float
+ParamListPr| Param ParamListPr|,
 ParamListPr|@|)
-Param|TypeSpecifier id|int float void
-Param|TypeSpecifier id [ ]|int float void
+Param|DataTypeSpecifier id ParamPr|int float
+ParamPr|[ ]|[
+ParamPr|@|, )
 CmpdStatement|{ LocalDeclaration StatementList }|{
 LocalDeclaration|VarDeclaration LocalDeclaration|int float void
-LocalDeclaration|@|; id ( num if return { while
-StatementList|Statement StatementList|; id ( num if return { while
+LocalDeclaration|@|; id if return { while
+StatementList|Statement StatementList|; id if return { while
 StatementList|@|}
-Statement|ExpressionStatement|; id ( num
+Statement|ExpressionStatement|; id
 Statement|CmpdStatement|{
 Statement|SelectionStatement|if
 Statement|IterationStatement|while
 Statement|ReturnStatement|return
-ExpressionStatement|Expression ;|id ( num
+ExpressionStatement|Expression ;|id
 ExpressionStatement|;|;
-SelectionStatement|if ( Expression ) Statement|if
-SelectionStatement|if ( Expression ) Statement else Statement|if
+SelectionStatement|if ( Expression ) Statement SelectionStatementPr|if
+SelectionStatementPr|else Statement|else
+SelectionStatementPr|@|; id if return { while }
 IterationStatement|while ( Expression ) Statement|while
-ReturnStatement|return ;|return
-ReturnStatement|return Expression ;|return
-Expression|Var = Expression|id
-Expression|SimpleExpression|( num id
-Var|id|id
-Var|id [ Expression ]|id
-SimpleExpression|AddExpression RelOp AddExpression|( num id
+ReturnStatement|return ReturnStatementPr|return
+ReturnStatementPr|Expression ;|id
+ReturnStatementPr|;|;
+Expression|id ExpressionPr|id
+ExpressionPr|VarPr = Expression|, =
+ExpressionPr|FactorPr SimpleExpression|(  * / >= <= > < == != + -
+Var|id VarPr|id
+VarPr|[ Expression ]|[
+VarPr|@|= * / >= <= > < == != + -
+SimpleExpression|TermPr AddExpressionPr RelOp AddExpression|* / + - >= <= > < == !=
 RelOp|>=|>=
 RelOp|<=|<=
 RelOp|>|>
 RelOp|<|<
 RelOp|==|==
 RelOp|!=|!=
-AddExpression|Term AddExpressionPr|( num id
+AddExpression|Term AddExpressionPr|( id num
 AddExpressionPr|AddOp Term AddExpressionPr|+ -
-AddExpressionPr|@|>= <= > < == != , ) ;
+AddExpressionPr|@|>= <= > < == !=
 AddOp|+|+
 AddOp|-|-
-Term|Factor TermPr|( num id
+Term|Factor TermPr|( id num
 TermPr|MulOp Factor TermPr|* /
-TermPr|@|+ - >= <= > < == != , ) ;
+TermPr|@|>= <= > < == != + -
 MulOp|*|*
 MulOp|/|/
 Factor|( Expression )|(
-Factor|Var|id
-Factor|Call|id
+Factor|id FactorPr|id
 Factor|num|num
+FactorPr|( Args )|(
+FactorPr|VarPr|[ = * / >= <= > < == != + - , ) ;
 Call|id ( Args )|id
-Args|ArgsList|id ( num ,
+Args|ArgsList|id ,
 Args|@|)
-ArgsList|Expression|id ( num
+ArgsList|Expression|id
 ArgsList|ArgsListPr|,
 ArgsListPr|, Expression ArgsListPr|,
 ArgsListPr|@|)
