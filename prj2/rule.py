@@ -95,10 +95,10 @@ class SubRule:
 		first = True
 		for token in self.predicitTokens:
 			if(first):
-				string+="self.currentToken==\""+token+"\""
+				string+="self.currentToken.getType()==\""+token+"\""
 				first = False
 			else:
-				string+=" or self.currentToken==\""+token+"\""
+				string+=" or self.currentToken.getType()==\""+token+"\""
 		return string
 	def toString(self):
 		return self.rule+"|"+str(self.predicitTokens)

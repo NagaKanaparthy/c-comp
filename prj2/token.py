@@ -10,5 +10,9 @@ class Token:
 		return self.tokenType
 	def getDepth(self):
 		return self.depth
+	def parseLine(self,line):
+		values = line.split("|")
+		self.value = values[0]
+		self.tokenType = values[1]
 	def toString(self):
 		return self.value+"|"+self.tokenType

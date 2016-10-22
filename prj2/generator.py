@@ -24,7 +24,13 @@ header = imports + "\nclass "+outputFileName+"\n"
 constructer  = "\tdef __init__(self, tokenList):\n"
 constructer += "\t\ttokenList.append(Token(\"$\",\"$\"))\n"
 constructer += "\t\tself.tokenList = tokenList\n"
-string = header + constructer + string
+constructer += "\t\tself.currentTokenNumber = 0\n"
+nextToken =   "\tdef nextToken(self):\n"
+nextToken +=   "\t\ttemp =self.tokenList[self.currentTokenNumber]\n"
+nextToken +=   "\t\tif(self.currentTokenNumber < len(tokenList)):\n"
+nextToken +=   "\t\t\tself.currentTokenNumber += 1\n"
+nextToken +=   "\t\treturn temp\n"
+string = header + constructer + nextToken + string
 #generate print to file
 fileOutput = open(outputFileName,'w')
 fileOutput.write(string)

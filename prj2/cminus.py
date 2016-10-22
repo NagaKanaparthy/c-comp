@@ -5,11 +5,17 @@ class cminus.py
 	def __init__(self, tokenList):
 		tokenList.append(Token("$","$"))
 		self.tokenList = tokenList
+		self.currentTokenNumber = 0
+	def nextToken(self):
+		temp =self.tokenList[self.currentTokenNumber]
+		if(self.currentTokenNumber < len(tokenList)):
+			self.currentTokenNumber += 1
+		return temp
 	def AddExpressionPr(self):
-		if(self.currentToken==">=" or self.currentToken=="<=" or self.currentToken==">" or self.currentToken=="<" or self.currentToken=="==" or self.currentToken=="!="):
+		if(self.currentToken.getType()==">=" or self.currentToken.getType()=="<=" or self.currentToken.getType()==">" or self.currentToken.getType()=="<" or self.currentToken.getType()=="==" or self.currentToken.getType()=="!="):
 
 			return
-		elif(self.currentToken=="+" or self.currentToken=="-"):
+		elif(self.currentToken.getType()=="+" or self.currentToken.getType()=="-"):
 
 
 			self.AddOp()
@@ -24,7 +30,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ExpressionPr(self):
-		if(self.currentToken=="," or self.currentToken=="="):
+		if(self.currentToken.getType()=="," or self.currentToken.getType()=="="):
 
 
 			self.VarPr()
@@ -37,7 +43,7 @@ class cminus.py
 
 			self.Expression()
 
-		elif(self.currentToken=="(" or self.currentToken=="*" or self.currentToken=="/" or self.currentToken==">=" or self.currentToken=="<=" or self.currentToken==">" or self.currentToken=="<" or self.currentToken=="==" or self.currentToken=="!=" or self.currentToken=="+" or self.currentToken=="-"):
+		elif(self.currentToken.getType()=="(" or self.currentToken.getType()=="*" or self.currentToken.getType()=="/" or self.currentToken.getType()==">=" or self.currentToken.getType()=="<=" or self.currentToken.getType()==">" or self.currentToken.getType()=="<" or self.currentToken.getType()=="==" or self.currentToken.getType()=="!=" or self.currentToken.getType()=="+" or self.currentToken.getType()=="-"):
 
 
 			self.FactorPr()
@@ -49,7 +55,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ExpressionStatement(self):
-		if(self.currentToken=="id"):
+		if(self.currentToken.getType()=="id"):
 
 
 			self.Expression()
@@ -59,7 +65,7 @@ class cminus.py
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken==";"):
+		elif(self.currentToken.getType()==";"):
 
 			if(self.currentToken.getType()==";")
 				self.nextToken()
@@ -70,10 +76,10 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def DeclarationListPr(self):
-		if(self.currentToken=="$"):
+		if(self.currentToken.getType()=="$"):
 
 			return
-		elif(self.currentToken=="int" or self.currentToken=="float" or self.currentToken=="void"):
+		elif(self.currentToken.getType()=="int" or self.currentToken.getType()=="float" or self.currentToken.getType()=="void"):
 
 
 			self.Declaration()
@@ -85,7 +91,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Param(self):
-		if(self.currentToken=="int" or self.currentToken=="float"):
+		if(self.currentToken.getType()=="int" or self.currentToken.getType()=="float"):
 
 
 			self.DataTypeSpecifier()
@@ -102,7 +108,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Program(self):
-		if(self.currentToken=="int" or self.currentToken=="float" or self.currentToken=="void"):
+		if(self.currentToken.getType()=="int" or self.currentToken.getType()=="float" or self.currentToken.getType()=="void"):
 
 
 			self.DeclarationList()
@@ -111,14 +117,14 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Params(self):
-		if(self.currentToken=="void"):
+		if(self.currentToken.getType()=="void"):
 
 			if(self.currentToken.getType()=="void")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="int" or self.currentToken=="float"):
+		elif(self.currentToken.getType()=="int" or self.currentToken.getType()=="float"):
 
 
 			self.ParamList()
@@ -127,27 +133,27 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Statement(self):
-		if(self.currentToken=="return"):
+		if(self.currentToken.getType()=="return"):
 
 
 			self.ReturnStatement()
 
-		elif(self.currentToken==";" or self.currentToken=="id"):
+		elif(self.currentToken.getType()==";" or self.currentToken.getType()=="id"):
 
 
 			self.ExpressionStatement()
 
-		elif(self.currentToken=="{"):
+		elif(self.currentToken.getType()=="{"):
 
 
 			self.CmpdStatement()
 
-		elif(self.currentToken=="while"):
+		elif(self.currentToken.getType()=="while"):
 
 
 			self.IterationStatement()
 
-		elif(self.currentToken=="if"):
+		elif(self.currentToken.getType()=="if"):
 
 
 			self.SelectionStatement()
@@ -156,7 +162,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Factor(self):
-		if(self.currentToken=="("):
+		if(self.currentToken.getType()=="("):
 
 			if(self.currentToken.getType()=="(")
 				self.nextToken()
@@ -171,14 +177,14 @@ class cminus.py
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="num"):
+		elif(self.currentToken.getType()=="num"):
 
 			if(self.currentToken.getType()=="num")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="id"):
+		elif(self.currentToken.getType()=="id"):
 
 			if(self.currentToken.getType()=="id")
 				self.nextToken()
@@ -192,7 +198,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Var(self):
-		if(self.currentToken=="id"):
+		if(self.currentToken.getType()=="id"):
 
 			if(self.currentToken.getType()=="id")
 				self.nextToken()
@@ -206,14 +212,14 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def DataTypeSpecifier(self):
-		if(self.currentToken=="int"):
+		if(self.currentToken.getType()=="int"):
 
 			if(self.currentToken.getType()=="int")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="float"):
+		elif(self.currentToken.getType()=="float"):
 
 			if(self.currentToken.getType()=="float")
 				self.nextToken()
@@ -224,12 +230,12 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ArgsList(self):
-		if(self.currentToken==","):
+		if(self.currentToken.getType()==","):
 
 
 			self.ArgsListPr()
 
-		elif(self.currentToken=="id"):
+		elif(self.currentToken.getType()=="id"):
 
 
 			self.Expression()
@@ -238,21 +244,21 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def TypeSpecifier(self):
-		if(self.currentToken=="int"):
+		if(self.currentToken.getType()=="int"):
 
 			if(self.currentToken.getType()=="int")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="void"):
+		elif(self.currentToken.getType()=="void"):
 
 			if(self.currentToken.getType()=="void")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="float"):
+		elif(self.currentToken.getType()=="float"):
 
 			if(self.currentToken.getType()=="float")
 				self.nextToken()
@@ -263,7 +269,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ParamListPr(self):
-		if(self.currentToken==","):
+		if(self.currentToken.getType()==","):
 
 
 			self.Param()
@@ -271,14 +277,14 @@ class cminus.py
 
 			self.ParamListPr()
 
-		elif(self.currentToken==")"):
+		elif(self.currentToken.getType()==")"):
 
 			return
 		else:
 			print("reject")
 			sys.exit(0)
 	def CmpdStatement(self):
-		if(self.currentToken=="{"):
+		if(self.currentToken.getType()=="{"):
 
 			if(self.currentToken.getType()=="{")
 				self.nextToken()
@@ -300,7 +306,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def VarDeclaration(self):
-		if(self.currentToken=="int" or self.currentToken=="float" or self.currentToken=="void"):
+		if(self.currentToken.getType()=="int" or self.currentToken.getType()=="float" or self.currentToken.getType()=="void"):
 
 
 			self.TypeSpecifier()
@@ -312,10 +318,10 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ParamPr(self):
-		if(self.currentToken=="," or self.currentToken==")"):
+		if(self.currentToken.getType()=="," or self.currentToken.getType()==")"):
 
 			return
-		elif(self.currentToken=="["):
+		elif(self.currentToken.getType()=="["):
 
 			if(self.currentToken.getType()=="[")
 				self.nextToken()
@@ -331,10 +337,10 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Args(self):
-		if(self.currentToken==")"):
+		if(self.currentToken.getType()==")"):
 
 			return
-		elif(self.currentToken=="id" or self.currentToken==","):
+		elif(self.currentToken.getType()=="id" or self.currentToken.getType()==","):
 
 
 			self.ArgsList()
@@ -343,14 +349,14 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def MulOp(self):
-		if(self.currentToken=="*"):
+		if(self.currentToken.getType()=="*"):
 
 			if(self.currentToken.getType()=="*")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="/"):
+		elif(self.currentToken.getType()=="/"):
 
 			if(self.currentToken.getType()=="/")
 				self.nextToken()
@@ -361,7 +367,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Declaration(self):
-		if(self.currentToken=="int" or self.currentToken=="float" or self.currentToken=="void"):
+		if(self.currentToken.getType()=="int" or self.currentToken.getType()=="float" or self.currentToken.getType()=="void"):
 
 
 			self.TypeSpecifier()
@@ -378,7 +384,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def SimpleExpression(self):
-		if(self.currentToken=="*" or self.currentToken=="/" or self.currentToken=="+" or self.currentToken=="-" or self.currentToken==">=" or self.currentToken=="<=" or self.currentToken==">" or self.currentToken=="<" or self.currentToken=="==" or self.currentToken=="!="):
+		if(self.currentToken.getType()=="*" or self.currentToken.getType()=="/" or self.currentToken.getType()=="+" or self.currentToken.getType()=="-" or self.currentToken.getType()==">=" or self.currentToken.getType()=="<=" or self.currentToken.getType()==">" or self.currentToken.getType()=="<" or self.currentToken.getType()=="==" or self.currentToken.getType()=="!="):
 
 
 			self.TermPr()
@@ -396,10 +402,10 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def SelectionStatementPr(self):
-		if(self.currentToken==";" or self.currentToken=="id" or self.currentToken=="if" or self.currentToken=="return" or self.currentToken=="{" or self.currentToken=="while" or self.currentToken=="}"):
+		if(self.currentToken.getType()==";" or self.currentToken.getType()=="id" or self.currentToken.getType()=="if" or self.currentToken.getType()=="return" or self.currentToken.getType()=="{" or self.currentToken.getType()=="while" or self.currentToken.getType()=="}"):
 
 			return
-		elif(self.currentToken=="else"):
+		elif(self.currentToken.getType()=="else"):
 
 			if(self.currentToken.getType()=="else")
 				self.nextToken()
@@ -413,7 +419,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def SelectionStatement(self):
-		if(self.currentToken=="if"):
+		if(self.currentToken.getType()=="if"):
 
 			if(self.currentToken.getType()=="if")
 				self.nextToken()
@@ -443,14 +449,14 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def AddOp(self):
-		if(self.currentToken=="+"):
+		if(self.currentToken.getType()=="+"):
 
 			if(self.currentToken.getType()=="+")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="-"):
+		elif(self.currentToken.getType()=="-"):
 
 			if(self.currentToken.getType()=="-")
 				self.nextToken()
@@ -461,7 +467,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Term(self):
-		if(self.currentToken=="(" or self.currentToken=="id" or self.currentToken=="num"):
+		if(self.currentToken.getType()=="(" or self.currentToken.getType()=="id" or self.currentToken.getType()=="num"):
 
 
 			self.Factor()
@@ -473,10 +479,10 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ArgsListPr(self):
-		if(self.currentToken==")"):
+		if(self.currentToken.getType()==")"):
 
 			return
-		elif(self.currentToken==","):
+		elif(self.currentToken.getType()==","):
 
 			if(self.currentToken.getType()==",")
 				self.nextToken()
@@ -493,7 +499,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ReturnStatementPr(self):
-		if(self.currentToken=="id"):
+		if(self.currentToken.getType()=="id"):
 
 
 			self.Expression()
@@ -503,7 +509,7 @@ class cminus.py
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken==";"):
+		elif(self.currentToken.getType()==";"):
 
 			if(self.currentToken.getType()==";")
 				self.nextToken()
@@ -514,12 +520,12 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def FactorPr(self):
-		if(self.currentToken=="[" or self.currentToken=="=" or self.currentToken=="*" or self.currentToken=="/" or self.currentToken==">=" or self.currentToken=="<=" or self.currentToken==">" or self.currentToken=="<" or self.currentToken=="==" or self.currentToken=="!=" or self.currentToken=="+" or self.currentToken=="-" or self.currentToken=="," or self.currentToken==")" or self.currentToken==";"):
+		if(self.currentToken.getType()=="[" or self.currentToken.getType()=="=" or self.currentToken.getType()=="*" or self.currentToken.getType()=="/" or self.currentToken.getType()==">=" or self.currentToken.getType()=="<=" or self.currentToken.getType()==">" or self.currentToken.getType()=="<" or self.currentToken.getType()=="==" or self.currentToken.getType()=="!=" or self.currentToken.getType()=="+" or self.currentToken.getType()=="-" or self.currentToken.getType()=="," or self.currentToken.getType()==")" or self.currentToken.getType()==";"):
 
 
 			self.VarPr()
 
-		elif(self.currentToken=="("):
+		elif(self.currentToken.getType()=="("):
 
 			if(self.currentToken.getType()=="(")
 				self.nextToken()
@@ -538,10 +544,10 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def StatementList(self):
-		if(self.currentToken=="}"):
+		if(self.currentToken.getType()=="}"):
 
 			return
-		elif(self.currentToken==";" or self.currentToken=="id" or self.currentToken=="if" or self.currentToken=="return" or self.currentToken=="{" or self.currentToken=="while"):
+		elif(self.currentToken.getType()==";" or self.currentToken.getType()=="id" or self.currentToken.getType()=="if" or self.currentToken.getType()=="return" or self.currentToken.getType()=="{" or self.currentToken.getType()=="while"):
 
 
 			self.Statement()
@@ -553,7 +559,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ParamList(self):
-		if(self.currentToken=="int" or self.currentToken=="float"):
+		if(self.currentToken.getType()=="int" or self.currentToken.getType()=="float"):
 
 
 			self.Param()
@@ -565,7 +571,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def AddExpression(self):
-		if(self.currentToken=="(" or self.currentToken=="id" or self.currentToken=="num"):
+		if(self.currentToken.getType()=="(" or self.currentToken.getType()=="id" or self.currentToken.getType()=="num"):
 
 
 			self.Term()
@@ -577,7 +583,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Expression(self):
-		if(self.currentToken=="id"):
+		if(self.currentToken.getType()=="id"):
 
 			if(self.currentToken.getType()=="id")
 				self.nextToken()
@@ -591,7 +597,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def FunDeclaration(self):
-		if(self.currentToken=="int" or self.currentToken=="float" or self.currentToken=="void"):
+		if(self.currentToken.getType()=="int" or self.currentToken.getType()=="float" or self.currentToken.getType()=="void"):
 
 
 			self.TypeSpecifier()
@@ -621,42 +627,42 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def RelOp(self):
-		if(self.currentToken==">="):
+		if(self.currentToken.getType()==">="):
 
 			if(self.currentToken.getType()==">=")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="=="):
+		elif(self.currentToken.getType()=="=="):
 
 			if(self.currentToken.getType()=="==")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="<="):
+		elif(self.currentToken.getType()=="<="):
 
 			if(self.currentToken.getType()=="<=")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="!="):
+		elif(self.currentToken.getType()=="!="):
 
 			if(self.currentToken.getType()=="!=")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="<"):
+		elif(self.currentToken.getType()=="<"):
 
 			if(self.currentToken.getType()=="<")
 				self.nextToken()
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken==">"):
+		elif(self.currentToken.getType()==">"):
 
 			if(self.currentToken.getType()==">")
 				self.nextToken()
@@ -667,7 +673,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def VarDeclarationPr(self):
-		if(self.currentToken=="["):
+		if(self.currentToken.getType()=="["):
 
 			if(self.currentToken.getType()=="[")
 				self.nextToken()
@@ -684,7 +690,7 @@ class cminus.py
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="id"):
+		elif(self.currentToken.getType()=="id"):
 
 			if(self.currentToken.getType()=="id")
 				self.nextToken()
@@ -695,7 +701,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def DeclarationList(self):
-		if(self.currentToken=="int" or self.currentToken=="float" or self.currentToken=="void"):
+		if(self.currentToken.getType()=="int" or self.currentToken.getType()=="float" or self.currentToken.getType()=="void"):
 
 
 			self.Declaration()
@@ -707,10 +713,10 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def LocalDeclaration(self):
-		if(self.currentToken==";" or self.currentToken=="id" or self.currentToken=="if" or self.currentToken=="return" or self.currentToken=="{" or self.currentToken=="while"):
+		if(self.currentToken.getType()==";" or self.currentToken.getType()=="id" or self.currentToken.getType()=="if" or self.currentToken.getType()=="return" or self.currentToken.getType()=="{" or self.currentToken.getType()=="while"):
 
 			return
-		elif(self.currentToken=="int" or self.currentToken=="float" or self.currentToken=="void"):
+		elif(self.currentToken.getType()=="int" or self.currentToken.getType()=="float" or self.currentToken.getType()=="void"):
 
 
 			self.VarDeclaration()
@@ -722,10 +728,10 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def TermPr(self):
-		if(self.currentToken==">=" or self.currentToken=="<=" or self.currentToken==">" or self.currentToken=="<" or self.currentToken=="==" or self.currentToken=="!=" or self.currentToken=="+" or self.currentToken=="-"):
+		if(self.currentToken.getType()==">=" or self.currentToken.getType()=="<=" or self.currentToken.getType()==">" or self.currentToken.getType()=="<" or self.currentToken.getType()=="==" or self.currentToken.getType()=="!=" or self.currentToken.getType()=="+" or self.currentToken.getType()=="-"):
 
 			return
-		elif(self.currentToken=="*" or self.currentToken=="/"):
+		elif(self.currentToken.getType()=="*" or self.currentToken.getType()=="/"):
 
 
 			self.MulOp()
@@ -740,7 +746,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def DeclarationPr(self):
-		if(self.currentToken=="("):
+		if(self.currentToken.getType()=="("):
 
 			if(self.currentToken.getType()=="(")
 				self.nextToken()
@@ -758,7 +764,7 @@ class cminus.py
 
 			self.CmpdStatement()
 
-		elif(self.currentToken=="["):
+		elif(self.currentToken.getType()=="["):
 
 			if(self.currentToken.getType()=="[")
 				self.nextToken()
@@ -775,17 +781,17 @@ class cminus.py
 			else:
 				print("reject")
 				sys.exit(0)
-		elif(self.currentToken=="int" or self.currentToken=="float" or self.currentToken=="void" or self.currentToken=="$"):
+		elif(self.currentToken.getType()=="int" or self.currentToken.getType()=="float" or self.currentToken.getType()=="void" or self.currentToken.getType()=="$"):
 
 			return
 		else:
 			print("reject")
 			sys.exit(0)
 	def VarPr(self):
-		if(self.currentToken=="=" or self.currentToken=="*" or self.currentToken=="/" or self.currentToken==">=" or self.currentToken=="<=" or self.currentToken==">" or self.currentToken=="<" or self.currentToken=="==" or self.currentToken=="!=" or self.currentToken=="+" or self.currentToken=="-"):
+		if(self.currentToken.getType()=="=" or self.currentToken.getType()=="*" or self.currentToken.getType()=="/" or self.currentToken.getType()==">=" or self.currentToken.getType()=="<=" or self.currentToken.getType()==">" or self.currentToken.getType()=="<" or self.currentToken.getType()=="==" or self.currentToken.getType()=="!=" or self.currentToken.getType()=="+" or self.currentToken.getType()=="-"):
 
 			return
-		elif(self.currentToken=="["):
+		elif(self.currentToken.getType()=="["):
 
 			if(self.currentToken.getType()=="[")
 				self.nextToken()
@@ -804,7 +810,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def Call(self):
-		if(self.currentToken=="id"):
+		if(self.currentToken.getType()=="id"):
 
 			if(self.currentToken.getType()=="id")
 				self.nextToken()
@@ -828,7 +834,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def ReturnStatement(self):
-		if(self.currentToken=="return"):
+		if(self.currentToken.getType()=="return"):
 
 			if(self.currentToken.getType()=="return")
 				self.nextToken()
@@ -842,7 +848,7 @@ class cminus.py
 			print("reject")
 			sys.exit(0)
 	def IterationStatement(self):
-		if(self.currentToken=="while"):
+		if(self.currentToken.getType()=="while"):
 
 			if(self.currentToken.getType()=="while")
 				self.nextToken()
