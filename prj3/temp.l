@@ -1,9 +1,15 @@
 
 
-int gcd ( int u , int v )
-{		if ( v == 0 )
-		return u ;
-	else
-		return gcd ( v , u - u / v * v );
-	
+
+float noclue (int z, float r)
+{
+	if(z=7)
+		return z;
+	while(r>z)
+	{
+		if (x==2)
+			return x;
+	}
+
+
 }

@@ -1,31 +1,3 @@
-# Python Parser Generator Assistance (PPGA)
-##### I like the word FPGA :D No Idea how to program one though :C
-### Nagavarun Kanaparthy
-
-## Purpose
-This was for my COP4620 Compilers class with Dr. Eggen. After the class is
-complete I plan to branch out to creating LL1 parsers for some common
-Serial Communication and bit level parsing.
-
-This will be used on the UNF TALON's Robosub and for speeding up
-interfacing sensors into the robot's system.
-
-May be also used for UNF IEEE Southeast Robot. <- not as complicated
-
-## Usage
-Have the grammar in a csv format using | as the delimiter. You can use
-[this](http://hackingoff.com/compilers/predict-first-follow-set) website to help
-calculate the predicts and see the first and follows. the tokens should be space
-delimited.
-
-1. Look at the **grammer.form** file for an example grammer.
-  * **Empty** is the **@** symbol
-  * **$** is reserved as a end of input symbol (You can change in generator.py)
-2. Look at the **token.form** file for an example file with kw
-3. Have your lex analyzer do the token handling you can use the **token.py**
-file to get an idea of how your tokens should look like.
-
-
 ## COP4620 Class Specs
 The rule table below has my left recursion fixed grammer of the C- grammer.
 I know there are some predict conflicts, so I made the generator let the User
@@ -35,6 +7,22 @@ I left the original generated one as the **og.py** file.
 
 After my tool generated this,
   all I did was add accepts and fixed conflict functions.
+
+### Semantics Supporting the following:
+* functions declared int or float  must have a return value of the correct type.
+* void functions may or may not have a return, but must not return a value.
+* parameters and arguments agree in number
+* parameters and arguments agree in type
+* operand agreement
+* operand/operator agreement
+* array index agreement
+* variable declaration (all variables must be declared ... scope)
+* variable declaration (all variables declared once ... scope)
+* void functions cannot have a return value
+* each program must have one main function
+* return only simple structures
+* id's should not be type void
+* each function should be defined (actually a linker error)
 
 ### Rule Table
 

@@ -26,7 +26,13 @@ class RuleDictionary:
 				else:
 					result+="\t\telif("+sRule.getConditionalStatment()+"):\n"
 					result+=self.parseRule(sRule.rule,rule)
-		result += "\t\telse:\n\t\t\tprint(\"reject at "+rule.name+" with token :\"+self.currentToken.getType()+str(self.currentTokenNumber))\n\t\t\tsys.exit(0)\n"
+
+		result += "\t\telse:\n\t\t\tif(self.debug):"+\
+				  "\n\t\t\t\tdebugStatement =\"in " + rule.name +" at\"+self.currentToken.getType()+str(self.currentTokenNumber)"+\
+				  "\n\t\t\telse:"+\
+				  "\n\t\t\t\tdebugStatement =\"\""+\
+				  "\n\t\t\tprint(\"REJECT \"+debugStatement)\n"+\
+				  "\n\t\t\tsys.exit(-1)\n"
 		return result
 	def parseRule(self,ruleString,rule):
 		string = ""
