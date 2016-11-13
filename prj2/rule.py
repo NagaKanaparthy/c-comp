@@ -39,7 +39,7 @@ class RuleDictionary:
 			else:
 				string += "\t\t\tif(self.currentToken.getType().strip()==\""+tok+"\"):\n"
 				string += "\t\t\t\tself.nextToken()\n"
-				string += "\t\t\telse: print(\"error \"+self.currentToken.getValue().strip()+\" "+rule.name+"\")\n"
+				#string += "\t\t\telse: print(\"error \"+self.currentToken.getValue().strip()+\" "+rule.name+"\")\n"
 		return string
 	def isNonTerminal(self,token):
 		if(self.rulesDictionary.get(token) != None):

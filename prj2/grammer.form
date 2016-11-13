@@ -36,18 +36,18 @@ Statement|ReturnStatement|return
 ExpressionStatement|Expression ;|id
 ExpressionStatement|;|;
 SelectionStatement|if ( Expression ) Statement SelectionStatementPr|if
-SelectionStatementPr|else Statement|else
-SelectionStatementPr|@|; id if return { while }
 IterationStatement|while ( Expression ) Statement|while
 ReturnStatement|return ReturnStatementPr|return
 ReturnStatementPr|Expression ;|id
 ReturnStatementPr|;|;
 Expression|id ExpressionPr|id
-ExpressionPr|VarPr = Expression|, =
-ExpressionPr|FactorPr SimpleExpression|; (  * / >= <= > < == != + -
+ExpressionPr|VarPr ExpressionPrPr|[ = * / >= <= > < == != + -
+ExpressionPr|( Args ) SimpleExpression|(
+ExpressionPrPr|= Expression|=
+ExpressionPrPr|SimpleExpression|* / >= <= > < == != + -
 Var|id VarPr|id
 VarPr|[ Expression ]|[
-VarPr|@|= * / >= <= > < == != + -
+VarPr|@|= * / >= <= > < == != + - , ) ] ;
 SimpleExpression|TermPr AddExpressionPr RelOp AddExpression|* / + - >= <= > < == !=
 RelOp|>=|>=
 RelOp|<=|<=
@@ -56,20 +56,20 @@ RelOp|<|<
 RelOp|==|==
 RelOp|!=|!=
 AddExpression|Term AddExpressionPr|( id num
-AddExpressionPr|AddOp Term AddExpressionPr|+ -
-AddExpressionPr|@|>= <= > < == != )
+AddExpressionPr|AddOp Term AddExpressionPr|* /
+AddExpressionPr|@|>= <= > < == != + - , ) ] ;
 AddOp|+|+
 AddOp|-|-
 Term|Factor TermPr|( id num
 TermPr|MulOp Factor TermPr|* /
-TermPr|@|>= <= > < == != + - )
+TermPr|@|>= <= > < == != + - , ) ] ;
 MulOp|*|*
 MulOp|/|/
 Factor|( Expression )|(
 Factor|id FactorPr|id
 Factor|num|num
 FactorPr|( Args )|(
-FactorPr|VarPr|[ = * / >= <= > < == != + - , ) ;
+FactorPr|VarPr|[
 Call|id ( Args )|id
 Args|ArgsList|id ,
 Args|@|)
