@@ -11,7 +11,6 @@ if (lexer.fileFound(fileName)):
 	tokens = lexer.tokenAnalyzer(serializedTokens)
 	os.remove("temp.l")
 	os.remove("tempTokens")
-	os.remove("temp.tok")
 parser = cminus(tokens)
 #parser.nextToken()
 parser.Program()
