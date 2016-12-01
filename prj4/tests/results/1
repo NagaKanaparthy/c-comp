@@ -3,7 +3,7 @@
 3         alloc          4                             y
 4         alloc          4                             z
 5         alloc          4                             m
-6         mult           3              y              _t0
+6         times          3              y              _t0
 7         add            x              _t0            _t1
 8         comp           _t1            5              _t2
 9         BRLEQ          _t2                           21
