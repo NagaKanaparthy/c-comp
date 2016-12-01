@@ -11,7 +11,8 @@ class RuleDictionary:
 				#add fuse rules and flag rule if confilct in predict sets
 				ruleInDict.fuseRules(rule)
 	def generateFunction(self,rule):
-		result = "\tdef "+rule.name+"(self):\n"
+		result = "\tdef "+rule.name+"(self):\n"+"\t\tif(self.debug):\n"+\
+				 "\t\t\tprint (\""+rule.name+": \"+self.currentToken.getType()+\" | \"+self.currentToken.getValue())\n"
 		if(rule.conflict):
 			result = "#Conflict" + result
 		else:
