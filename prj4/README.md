@@ -1,6 +1,8 @@
 # C- Quadruples Generator  
 ### Nagavarun Kanaparthy
-## Goals
+## Notes
+Creation notes are in the CodeGenerationNotes.md file.
+## Purpose
 This program will generate simple quadruples as shown in the examples
 below.
 ### Supported Quadruples Features
@@ -16,6 +18,9 @@ below.
         * else
 * simple arithmetic
 * assignment
+```bash
+turnin fn ree4620_4
+```
 ## Examples
 ```c
 Example 1
