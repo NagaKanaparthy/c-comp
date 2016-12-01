@@ -14,9 +14,9 @@ class cminus:
 	def AddExpressionPr(self):
 		if(self.debug):
 			print ("AddExpressionPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-" or self.currentToken.getType().strip()=="," or self.currentToken.getType().strip()==")" or self.currentToken.getType().strip()=="]" or self.currentToken.getType().strip()==";"):
+		if(self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="," or self.currentToken.getType().strip()==")" or self.currentToken.getType().strip()=="]" or self.currentToken.getType().strip()==";"):
 			return
-		elif(self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/"):
+		elif(self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-"):
 			self.AddOp()
 			self.Term()
 			self.AddExpressionPr()
@@ -70,19 +70,11 @@ class cminus:
 	def DeclarationListPr(self):
 		if(self.debug):
 			print ("DeclarationListPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="$"):
+		if(self.currentToken.getType().strip()=="$" or self.currentToken.getType().strip()=="}"):
 			return
 		elif(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
 			self.Declaration()
 			self.DeclarationListPr()
-		else:
-			if(self.debug):
-				debugStatement ="in DeclarationListPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
 	def Param(self):
 		if(self.debug):
 			print ("Param: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
@@ -100,18 +92,8 @@ class cminus:
 
 			sys.exit(-1)
 	def Program(self):
-		if(self.debug):
-			print ("Program: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
-			self.DeclarationList()
-		else:
-			if(self.debug):
-				debugStatement ="in Program at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
+		self.DeclarationList()
 
-			sys.exit(-1)
 	def Params(self):
 		if(self.debug):
 			print ("Params: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
@@ -218,7 +200,6 @@ class cminus:
 			else:
 				debugStatement =""
 			print("REJECT "+debugStatement)
-
 			sys.exit(-1)
 	def TypeSpecifier(self):
 		if(self.debug):
@@ -268,6 +249,9 @@ class cminus:
 			self.StatementList()
 			if(self.currentToken.getType().strip()=="}"):
 				self.nextToken()
+			else:
+				self.LocalDeclaration()
+				self.StatementList()
 		else:
 			if(self.debug):
 				debugStatement ="in CmpdStatement at"+self.currentToken.getType()+str(self.currentTokenNumber)
@@ -491,7 +475,7 @@ class cminus:
 	def StatementList(self):
 		if(self.debug):
 			print ("StatementList: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="}"):
+		if(self.currentToken.getType().strip()=="}" or self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
 			return
 		elif(self.currentToken.getType().strip()==";" or self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()=="if" or self.currentToken.getType().strip()=="return" or self.currentToken.getType().strip()=="{" or self.currentToken.getType().strip()=="while"):
 			self.Statement()
@@ -539,6 +523,7 @@ class cminus:
 			if(self.currentToken.getType().strip()=="id"):
 				self.nextToken()
 			self.ExpressionPr()
+
 		else:
 			if(self.debug):
 				debugStatement ="in Expression at"+self.currentToken.getType()+str(self.currentTokenNumber)
@@ -603,21 +588,14 @@ class cminus:
 		if(self.currentToken.getType().strip()=="["):
 			if(self.currentToken.getType().strip()=="["):
 				self.nextToken()
-			if(self.currentToken.getType().strip()=="num"):
-				self.nextToken()
-			if(self.currentToken.getType().strip()=="]"):
-				self.nextToken()
+				if(self.currentToken.getType().strip()=="num"):
+					self.nextToken()
+				if(self.currentToken.getType().strip()=="]"):
+					self.nextToken()
 		elif(self.currentToken.getType().strip()=="id"):
 			if(self.currentToken.getType().strip()=="id"):
 				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in VarDeclarationPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
+				self.VarDeclarationPr()
 	def ExpressionPrPr(self):
 		if(self.debug):
 			print ("ExpressionPrPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
@@ -626,7 +604,10 @@ class cminus:
 		elif(self.currentToken.getType().strip()=="="):
 			if(self.currentToken.getType().strip()=="="):
 				self.nextToken()
-			self.Expression()
+				if (self.currentToken.getType().strip() == "num"):
+					self.nextToken()
+				else:
+					self.Expression()
 		else:
 			if(self.debug):
 				debugStatement ="in ExpressionPrPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
@@ -636,19 +617,9 @@ class cminus:
 
 			sys.exit(-1)
 	def DeclarationList(self):
-		if(self.debug):
-			print ("DeclarationList: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
-			self.Declaration()
-			self.DeclarationListPr()
-		else:
-			if(self.debug):
-				debugStatement ="in DeclarationList at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
+		self.Declaration()
+		self.DeclarationListPr()
 
-			sys.exit(-1)
 	def LocalDeclaration(self):
 		if(self.debug):
 			print ("LocalDeclaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
@@ -693,6 +664,8 @@ class cminus:
 			self.Args()
 			if(self.currentToken.getType().strip()==")"):
 				self.nextToken()
+		elif(self.currentToken.getType().strip()==")" or self.currentToken.getType().strip()==";"):
+			return
 		else:
 			if(self.debug):
 				debugStatement ="in FactorPr at"+self.currentToken.getType()+str(self.currentTokenNumber)

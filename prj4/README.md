@@ -1,7 +1,8 @@
 # C- Quadruples Generator  
 ### Nagavarun Kanaparthy
 ## Notes
-Creation notes are in the CodeGenerationNotes.md file.
+Creation notes are in the CodeGenerationNotes.md file. Also parser was
+shrinked removing some gen code from tool in prj2.
 ## Purpose
 This program will generate simple quadruples as shown in the examples
 below.
