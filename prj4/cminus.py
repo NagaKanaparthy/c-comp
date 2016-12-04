@@ -7,112 +7,495 @@ class cminus:
 		self.currentTokenNumber = 0
 		self.currentToken=tokenList[0]
 		self.debug = True
+		self.debugStates = False
 	def nextToken(self):
 		if(self.currentTokenNumber < len(self.tokenList)):
 			self.currentTokenNumber += 1
 		self.currentToken = self.tokenList[self.currentTokenNumber]
+	def AddExpression(self):
+		if(self.currentToken.getType().strip()=="(" or self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()=="num"):
+			self.Term()
+			self.AddExpressionPr()
+		else:
+			if(self.debug):
+				print("REJECT@ AddExpression with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def AddExpressionPr(self):
-		if(self.debug):
-			print ("AddExpressionPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="," or self.currentToken.getType().strip()==")" or self.currentToken.getType().strip()=="]" or self.currentToken.getType().strip()==";"):
+		if(self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-" or self.currentToken.getType().strip()=="," or self.currentToken.getType().strip()==")" or self.currentToken.getType().strip()=="]" or self.currentToken.getType().strip()==";"):
 			return
-		elif(self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-"):
+		elif(self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/"):
 			self.AddOp()
 			self.Term()
 			self.AddExpressionPr()
 		else:
 			if(self.debug):
-				debugStatement ="in AddExpressionPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
+				print("REJECT@ AddExpressionPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def AddOp(self):
+		if(self.currentToken.getType().strip()=="+"):
+			if(self.debugStates):
+				print ("AddOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="+"):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="-"):
+			if(self.debugStates):
+				print ("AddOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="-"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ AddOp with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def Args(self):
+		if(self.currentToken.getType().strip()==")"):
+			return
+		elif(self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()==","):
+			self.ArgsList()
+		else:
+			if(self.debug):
+				print("REJECT@ Args with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def ArgsList(self):
+		if(self.currentToken.getType().strip()==","):
+			self.ArgsListPr()
+		elif(self.currentToken.getType().strip()=="id"):
+			self.Expression()
+		else:
+			if(self.debug):
+				print("REJECT@ ArgsList with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def ArgsListPr(self):
+		if(self.currentToken.getType().strip()==")"):
+			return
+		elif(self.currentToken.getType().strip()==","):
+			if(self.debugStates):
+				print ("ArgsListPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==","):
+				self.nextToken()
+			self.Expression()
+			self.ArgsListPr()
+		else:
+			if(self.debug):
+				print("REJECT@ ArgsListPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def Call(self):
+		if(self.currentToken.getType().strip()=="id"):
+			if(self.debugStates):
+				print ("Call: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="id"):
+				self.nextToken()
+			if(self.debugStates):
+				print ("Call: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="("):
+				self.nextToken()
+			self.Args()
+			if(self.debugStates):
+				print ("Call: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==")"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ Call with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def CmpdStatement(self):
+		if(self.currentToken.getType().strip()=="{"):
+			if(self.debugStates):
+				print ("CmpdStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="{"):
+				self.nextToken()
+			self.LocalDeclaration()
+			self.StatementList()
+			if(self.debugStates):
+				print ("CmpdStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="}"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ CmpdStatement with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def DataTypeSpecifier(self):
+		if(self.currentToken.getType().strip()=="int"):
+			if(self.debugStates):
+				print ("DataTypeSpecifier: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="int"):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="float"):
+			if(self.debugStates):
+				print ("DataTypeSpecifier: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="float"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ DataTypeSpecifier with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def Declaration(self):
+		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):    
+			if(self.debugStates):
+				print ("Declaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			self.nextToken()
+			self.DeclarationPr()
+		else:
+			if(self.debug):
+				print("REJECT@ Declaration with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def DeclarationList(self):
+		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
+			self.Declaration()
+			self.DeclarationListPr()
+		else:
+			if(self.debug):
+				print("REJECT@ DeclarationList with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def DeclarationListPr(self):
+		if(self.currentToken.getType().strip()=="$"):
+			return
+		elif(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
+			self.Declaration()
+			self.DeclarationListPr()
+		else:
+			if(self.debug):
+				print("REJECT@ DeclarationListPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def DeclarationPr(self):
+		if(self.currentToken.getType().strip()=="("):
+			if(self.debugStates):
+				print ("DeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="("):
+				self.nextToken()
+				self.Params()
+				if(self.debugStates):
+					print ("DeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+					if(self.currentToken.getType().strip()==")"):
+						self.nextToken()
+					self.CmpdStatement()
+		elif(self.currentToken.getType().strip()=="["):
+			if(self.debugStates):
+				print ("DeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="["):
+				self.nextToken()
+				if(self.debugStates):
+					print ("DeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+				if(self.currentToken.getType().strip()=="num"):
+					self.nextToken()
+					if(self.debugStates):
+						print ("DeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+					if(self.currentToken.getType().strip()=="]"):
+						self.nextToken()
+		elif(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void" or self.currentToken.getType().strip()=="$"):
+			return
+		else:
+			if(self.debug):
+				print("REJECT@ DeclarationPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def Expression(self):
+		if(self.currentToken.getType().strip()=="id"):
+			if(self.debugStates):
+				print ("Expression: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="id"):
+				self.nextToken()
+			self.ExpressionPr()
+		else:
+			if(self.debug):
+				print("REJECT@ Expression with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def ExpressionPr(self):
-		if(self.debug):
-			print ("ExpressionPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 		if(self.currentToken.getType().strip()=="[" or self.currentToken.getType().strip()=="=" or self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/" or self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-"):
 			self.VarPr()
 			self.ExpressionPrPr()
 		elif(self.currentToken.getType().strip()=="("):
+			if(self.debugStates):
+				print ("ExpressionPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 			if(self.currentToken.getType().strip()=="("):
 				self.nextToken()
 			self.Args()
+			if(self.debugStates):
+				print ("ExpressionPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 			if(self.currentToken.getType().strip()==")"):
 				self.nextToken()
 			self.SimpleExpression()
 		else:
 			if(self.debug):
-				debugStatement ="in ExpressionPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
+				print("REJECT@ ExpressionPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def ExpressionPrPr(self):
+		if(self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/" or self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-"):
+			self.SimpleExpression()
+		elif(self.currentToken.getType().strip()=="="):
+			if(self.debugStates):
+				print ("ExpressionPrPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="="):
+				self.nextToken()
+			self.Expression()
+		else:
+			if(self.debug):
+				print("REJECT@ ExpressionPrPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def ExpressionStatement(self):
-		if(self.debug):
-			print ("ExpressionStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 		if(self.currentToken.getType().strip()=="id"):
 			self.Expression()
+			if(self.debugStates):
+				print ("ExpressionStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 			if(self.currentToken.getType().strip()==";"):
 				self.nextToken()
 		elif(self.currentToken.getType().strip()==";"):
+			if(self.debugStates):
+				print ("ExpressionStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 			if(self.currentToken.getType().strip()==";"):
 				self.nextToken()
 		else:
 			if(self.debug):
-				debugStatement ="in ExpressionStatement at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def DeclarationListPr(self):
-		if(self.debug):
-			print ("DeclarationListPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="$" or self.currentToken.getType().strip()=="}"):
+				print("REJECT@ ExpressionStatement with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def Factor(self):
+		if(self.currentToken.getType().strip()=="("):
+			if(self.debugStates):
+				print ("Factor: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="("):
+				self.nextToken()
+			self.Expression()
+			if(self.debugStates):
+				print ("Factor: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==")"):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="num"):
+			if(self.debugStates):
+				print ("Factor: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="num"):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="id"):
+			if(self.debugStates):
+				print ("Factor: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="id"):
+				self.nextToken()
+			self.FactorPr()
+		else:
+			if(self.debug):
+				print("REJECT@ Factor with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def FactorPr(self):
+		if(self.currentToken.getType().strip()=="["):
+			self.VarPr()
+		elif(self.currentToken.getType().strip()=="("):
+			if(self.debugStates):
+				print ("FactorPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="("):
+				self.nextToken()
+			self.Args()
+			if(self.debugStates):
+				print ("FactorPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==")"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ FactorPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def FunDeclaration(self):
+		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
+			self.TypeSpecifier()
+			if(self.debugStates):
+				print ("FunDeclaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="id"):
+				self.nextToken()
+			if(self.debugStates):
+				print ("FunDeclaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="("):
+				self.nextToken()
+			self.Params()
+			if(self.debugStates):
+				print ("FunDeclaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==")"):
+				self.nextToken()
+			self.CmpdStatement()
+		else:
+			if(self.debug):
+				print("REJECT@ FunDeclaration with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def IterationStatement(self):
+		if(self.currentToken.getType().strip()=="while"):
+			if(self.debugStates):
+				print ("IterationStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="while"):
+				self.nextToken()
+			if(self.debugStates):
+				print ("IterationStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="("):
+				self.nextToken()
+			self.Expression()
+			if(self.debugStates):
+				print ("IterationStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==")"):
+				self.nextToken()
+			self.Statement()
+		else:
+			if(self.debug):
+				print("REJECT@ IterationStatement with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def LocalDeclaration(self):
+		if(self.currentToken.getType().strip()==";" or self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()=="if" or self.currentToken.getType().strip()=="return" or self.currentToken.getType().strip()=="{" or self.currentToken.getType().strip()=="while"):
 			return
 		elif(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
-			self.Declaration()
-			self.DeclarationListPr()
+			self.VarDeclaration()
+			self.LocalDeclaration()
+		else:
+			if(self.debug):
+				print("REJECT@ LocalDeclaration with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def MulOp(self):
+		if(self.currentToken.getType().strip()=="*"):
+			if(self.debugStates):
+				print ("MulOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="*"):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="/"):
+			if(self.debugStates):
+				print ("MulOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="/"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ MulOp with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def Param(self):
-		if(self.debug):
-			print ("Param: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float"):
 			self.DataTypeSpecifier()
+			if(self.debugStates):
+				print ("Param: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 			if(self.currentToken.getType().strip()=="id"):
 				self.nextToken()
 			self.ParamPr()
 		else:
 			if(self.debug):
-				debugStatement ="in Param at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def Program(self):
-		self.DeclarationList()
-
+				print("REJECT@ Param with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def ParamList(self):
+		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float"):
+			self.Param()
+			self.ParamListPr()
+		else:
+			if(self.debug):
+				print("REJECT@ ParamList with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def ParamListPr(self):
+		if(self.currentToken.getType().strip()==")"):
+			return
+		elif(self.currentToken.getType().strip()==","):
+			if(self.debugStates):
+				print ("ParamListPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==","):
+				self.nextToken()
+			self.Param()
+			self.ParamListPr()
+		else:
+			if(self.debug):
+				print("REJECT@ ParamListPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def ParamPr(self):
+		if(self.currentToken.getType().strip()=="," or self.currentToken.getType().strip()==")"):
+			return
+		elif(self.currentToken.getType().strip()=="["):
+			if(self.debugStates):
+				print ("ParamPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="["):
+				self.nextToken()
+			if(self.debugStates):
+				print ("ParamPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="]"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ ParamPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def Params(self):
-		if(self.debug):
-			print ("Params: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 		if(self.currentToken.getType().strip()=="void"):
+			if(self.debugStates):
+				print ("Params: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 			if(self.currentToken.getType().strip()=="void"):
 				self.nextToken()
 		elif(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float"):
 			self.ParamList()
 		else:
 			if(self.debug):
-				debugStatement ="in Params at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
+				print("REJECT@ Params with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def Program(self):
+		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
+			self.DeclarationList()
+		else:
+			if(self.debug):
+				print("REJECT@ Program with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def RelOp(self):
+		if(self.currentToken.getType().strip()==">="):
+			if(self.debugStates):
+				print ("RelOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==">="):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="=="):
+			if(self.debugStates):
+				print ("RelOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="=="):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="<="):
+			if(self.debugStates):
+				print ("RelOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="<="):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="!="):
+			if(self.debugStates):
+				print ("RelOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="!="):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="<"):
+			if(self.debugStates):
+				print ("RelOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="<"):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()==">"):
+			if(self.debugStates):
+				print ("RelOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==">"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ RelOp with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def ReturnStatement(self):
+		if(self.currentToken.getType().strip()=="return"):
+			if(self.debugStates):
+				print ("ReturnStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="return"):
+				self.nextToken()
+			self.ReturnStatementPr()
+		else:
+			if(self.debug):
+				print("REJECT@ ReturnStatement with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def ReturnStatementPr(self):
+		if(self.currentToken.getType().strip()=="id"):
+			self.Expression()
+			if(self.debugStates):
+				print ("ReturnStatementPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==";"):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()==";"):
+			if(self.debugStates):
+				print ("ReturnStatementPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==";"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ ReturnStatementPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def SelectionStatement(self):
+		if(self.currentToken.getType().strip()=="if"):
+			if(self.debugStates):
+				print ("SelectionStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="if"):
+				self.nextToken()
+			if(self.debugStates):
+				print ("SelectionStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="("):
+				self.nextToken()
+			self.Expression()
+			if(self.debugStates):
+				print ("SelectionStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()==")"):
+				self.nextToken()
+			self.Statement()
+			self.SelectionStatementPr()
+		else:
+			if(self.debug):
+				print("REJECT@ SelectionStatement with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def SelectionStatementPr(self):
+		if(self.currentToken.getType().strip()==";" or self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()=="if" or self.currentToken.getType().strip()=="return" or self.currentToken.getType().strip()=="{" or self.currentToken.getType().strip()=="while"):
+			return
+		elif(self.currentToken.getType().strip()=="else"):
+			if(self.debugStates):
+				print ("SelectionStatementPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="else"):
+				self.nextToken()
+			self.Statement()
+		else:
+			if(self.debug):
+				print("REJECT@ SelectionStatementPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def SimpleExpression(self):
+		if(self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-" or self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!="):
+			self.TermPr()
+			self.AddExpressionPr()
+			self.RelOp()
+			self.AddExpression()
+		else:
+			if(self.debug):
+				print("REJECT@ SimpleExpression with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def Statement(self):
-		if(self.debug):
-			print ("Statement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 		if(self.currentToken.getType().strip()=="return"):
 			self.ReturnStatement()
 		elif(self.currentToken.getType().strip()==";" or self.currentToken.getType().strip()=="id"):
@@ -125,520 +508,24 @@ class cminus:
 			self.SelectionStatement()
 		else:
 			if(self.debug):
-				debugStatement ="in Statement at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def Factor(self):
-		if(self.debug):
-			print ("Factor: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="("):
-			if(self.currentToken.getType().strip()=="("):
-				self.nextToken()
-			self.Expression()
-			if(self.currentToken.getType().strip()==")"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="num"):
-			if(self.currentToken.getType().strip()=="num"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="id"):
-			if(self.currentToken.getType().strip()=="id"):
-				self.nextToken()
-			self.FactorPr()
-		else:
-			if(self.debug):
-				debugStatement ="in Factor at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def Var(self):
-		if(self.debug):
-			print ("Var: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="id"):
-			if(self.currentToken.getType().strip()=="id"):
-				self.nextToken()
-			self.VarPr()
-		else:
-			if(self.debug):
-				debugStatement ="in Var at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def DataTypeSpecifier(self):
-		if(self.debug):
-			print ("DataTypeSpecifier: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="int"):
-			if(self.currentToken.getType().strip()=="int"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="float"):
-			if(self.currentToken.getType().strip()=="float"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in DataTypeSpecifier at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def ArgsList(self):
-		if(self.debug):
-			print ("ArgsList: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()==","):
-			self.ArgsListPr()
-		elif(self.currentToken.getType().strip()=="id"):
-			self.Expression()
-		else:
-			if(self.debug):
-				debugStatement ="in ArgsList at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-			sys.exit(-1)
-	def TypeSpecifier(self):
-		if(self.debug):
-			print ("TypeSpecifier: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="int"):
-			if(self.currentToken.getType().strip()=="int"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="void"):
-			if(self.currentToken.getType().strip()=="void"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="float"):
-			if(self.currentToken.getType().strip()=="float"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in TypeSpecifier at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def ParamListPr(self):
-		if(self.debug):
-			print ("ParamListPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()==")"):
-			return
-		elif(self.currentToken.getType().strip()==","):
-			if(self.currentToken.getType().strip()==","):
-				self.nextToken()
-			self.Param()
-			self.ParamListPr()
-		else:
-			if(self.debug):
-				debugStatement ="in ParamListPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def CmpdStatement(self):
-		if(self.debug):
-			print ("CmpdStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="{"):
-			if(self.currentToken.getType().strip()=="{"):
-				self.nextToken()
-			self.LocalDeclaration()
-			self.StatementList()
-			if(self.currentToken.getType().strip()=="}"):
-				self.nextToken()
-			else:
-				self.LocalDeclaration()
-				self.StatementList()
-		else:
-			if(self.debug):
-				debugStatement ="in CmpdStatement at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def VarDeclaration(self):
-		if(self.debug):
-			print ("VarDeclaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
-			self.TypeSpecifier()
-			self.VarDeclarationPr()
-		else:
-			if(self.debug):
-				debugStatement ="in VarDeclaration at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def ParamPr(self):
-		if(self.debug):
-			print ("ParamPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="," or self.currentToken.getType().strip()==")"):
-			return
-		elif(self.currentToken.getType().strip()=="["):
-			if(self.currentToken.getType().strip()=="["):
-				self.nextToken()
-			if(self.currentToken.getType().strip()=="]"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in ParamPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def Args(self):
-		if(self.debug):
-			print ("Args: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()==")"):
-			return
-		elif(self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()==","):
-			self.ArgsList()
-		else:
-			if(self.debug):
-				debugStatement ="in Args at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def MulOp(self):
-		if(self.debug):
-			print ("MulOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="*"):
-			if(self.currentToken.getType().strip()=="*"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="/"):
-			if(self.currentToken.getType().strip()=="/"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in MulOp at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def Declaration(self):
-		if(self.debug):
-			print ("Declaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
-			self.TypeSpecifier()
-			if(self.currentToken.getType().strip()=="id"):
-				self.nextToken()
-			self.DeclarationPr()
-		else:
-			if(self.debug):
-				debugStatement ="in Declaration at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def SimpleExpression(self):
-		if(self.debug):
-			print ("SimpleExpression: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-" or self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!="):
-			self.TermPr()
-			self.AddExpressionPr()
-			self.RelOp()
-			self.AddExpression()
-		else:
-			if(self.debug):
-				debugStatement ="in SimpleExpression at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def SelectionStatement(self):
-		if(self.debug):
-			print ("SelectionStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="if"):
-			if(self.currentToken.getType().strip()=="if"):
-				self.nextToken()
-			if(self.currentToken.getType().strip()=="("):
-				self.nextToken()
-			self.Expression()
-			if(self.currentToken.getType().strip()==")"):
-				self.nextToken()
-			self.Statement()
-			if(self.currentToken.getType().strip()=="SelectionStatementPr"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in SelectionStatement at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def AddOp(self):
-		if(self.debug):
-			print ("AddOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="+"):
-			if(self.currentToken.getType().strip()=="+"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="-"):
-			if(self.currentToken.getType().strip()=="-"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in AddOp at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def Term(self):
-		if(self.debug):
-			print ("Term: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="(" or self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()=="num"):
-			self.Factor()
-			self.TermPr()
-		else:
-			if(self.debug):
-				debugStatement ="in Term at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def ArgsListPr(self):
-		if(self.debug):
-			print ("ArgsListPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()==")"):
-			return
-		elif(self.currentToken.getType().strip()==","):
-			if(self.currentToken.getType().strip()==","):
-				self.nextToken()
-			self.Expression()
-			self.ArgsListPr()
-		else:
-			if(self.debug):
-				debugStatement ="in ArgsListPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def ReturnStatementPr(self):
-		if(self.debug):
-			print ("ReturnStatementPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="id"):
-			self.Expression()
-			if(self.currentToken.getType().strip()==";"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()==";"):
-			if(self.currentToken.getType().strip()==";"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in ReturnStatementPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def DeclarationPr(self):
-		if(self.debug):
-			print ("DeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="("):
-			if(self.currentToken.getType().strip()=="("):
-				self.nextToken()
-			self.Params()
-			if(self.currentToken.getType().strip()==")"):
-				self.nextToken()
-			self.CmpdStatement()
-		elif(self.currentToken.getType().strip()=="["):
-			if(self.currentToken.getType().strip()=="["):
-				self.nextToken()
-			if(self.currentToken.getType().strip()=="num"):
-				self.nextToken()
-			if(self.currentToken.getType().strip()=="]"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void" or self.currentToken.getType().strip()=="$"):
-			return
-		else:
-			if(self.debug):
-				debugStatement ="in DeclarationPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
+				print("REJECT@ Statement with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def StatementList(self):
-		if(self.debug):
-			print ("StatementList: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="}" or self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
+		if(self.currentToken.getType().strip()=="}"):
 			return
 		elif(self.currentToken.getType().strip()==";" or self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()=="if" or self.currentToken.getType().strip()=="return" or self.currentToken.getType().strip()=="{" or self.currentToken.getType().strip()=="while"):
 			self.Statement()
 			self.StatementList()
 		else:
 			if(self.debug):
-				debugStatement ="in StatementList at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def ParamList(self):
-		if(self.debug):
-			print ("ParamList: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float"):
-			self.Param()
-			self.ParamListPr()
-		else:
-			if(self.debug):
-				debugStatement ="in ParamList at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def AddExpression(self):
-		if(self.debug):
-			print ("AddExpression: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+				print("REJECT@ StatementList with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def Term(self):
 		if(self.currentToken.getType().strip()=="(" or self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()=="num"):
-			self.Term()
-			self.AddExpressionPr()
+			self.Factor()
+			self.TermPr()
 		else:
 			if(self.debug):
-				debugStatement ="in AddExpression at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def Expression(self):
-		if(self.debug):
-			print ("Expression: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="id"):
-			if(self.currentToken.getType().strip()=="id"):
-				self.nextToken()
-			self.ExpressionPr()
-
-		else:
-			if(self.debug):
-				debugStatement ="in Expression at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def FunDeclaration(self):
-		if(self.debug):
-			print ("FunDeclaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
-			self.TypeSpecifier()
-			if(self.currentToken.getType().strip()=="id"):
-				self.nextToken()
-			if(self.currentToken.getType().strip()=="("):
-				self.nextToken()
-			self.Params()
-			if(self.currentToken.getType().strip()==")"):
-				self.nextToken()
-			self.CmpdStatement()
-		else:
-			if(self.debug):
-				debugStatement ="in FunDeclaration at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def RelOp(self):
-		if(self.debug):
-			print ("RelOp: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()==">="):
-			if(self.currentToken.getType().strip()==">="):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="=="):
-			if(self.currentToken.getType().strip()=="=="):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="<="):
-			if(self.currentToken.getType().strip()=="<="):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="!="):
-			if(self.currentToken.getType().strip()=="!="):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()=="<"):
-			if(self.currentToken.getType().strip()=="<"):
-				self.nextToken()
-		elif(self.currentToken.getType().strip()==">"):
-			if(self.currentToken.getType().strip()==">"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in RelOp at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def VarDeclarationPr(self):
-		if(self.debug):
-			print ("VarDeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="["):
-			if(self.currentToken.getType().strip()=="["):
-				self.nextToken()
-				if(self.currentToken.getType().strip()=="num"):
-					self.nextToken()
-				if(self.currentToken.getType().strip()=="]"):
-					self.nextToken()
-		elif(self.currentToken.getType().strip()=="id"):
-			if(self.currentToken.getType().strip()=="id"):
-				self.nextToken()
-				self.VarDeclarationPr()
-	def ExpressionPrPr(self):
-		if(self.debug):
-			print ("ExpressionPrPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/" or self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-"):
-			self.SimpleExpression()
-		elif(self.currentToken.getType().strip()=="="):
-			if(self.currentToken.getType().strip()=="="):
-				self.nextToken()
-				if (self.currentToken.getType().strip() == "num"):
-					self.nextToken()
-				else:
-					self.Expression()
-		else:
-			if(self.debug):
-				debugStatement ="in ExpressionPrPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def DeclarationList(self):
-		self.Declaration()
-		self.DeclarationListPr()
-
-	def LocalDeclaration(self):
-		if(self.debug):
-			print ("LocalDeclaration: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()==";" or self.currentToken.getType().strip()=="id" or self.currentToken.getType().strip()=="if" or self.currentToken.getType().strip()=="return" or self.currentToken.getType().strip()=="{" or self.currentToken.getType().strip()=="while"):
-			return
-		elif(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
-			self.VarDeclaration()
-			self.LocalDeclaration()
-		else:
-			if(self.debug):
-				debugStatement ="in LocalDeclaration at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
+				print("REJECT@ Term with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def TermPr(self):
-		if(self.debug):
-			print ("TermPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 		if(self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-" or self.currentToken.getType().strip()=="," or self.currentToken.getType().strip()==")" or self.currentToken.getType().strip()=="]" or self.currentToken.getType().strip()==";"):
 			return
 		elif(self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/"):
@@ -647,103 +534,78 @@ class cminus:
 			self.TermPr()
 		else:
 			if(self.debug):
-				debugStatement ="in TermPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def FactorPr(self):
-		if(self.debug):
-			print ("FactorPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="["):
-			self.VarPr()
-		elif(self.currentToken.getType().strip()=="("):
-			if(self.currentToken.getType().strip()=="("):
+				print("REJECT@ TermPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def TypeSpecifier(self):
+		if(self.currentToken.getType().strip()=="int"):
+			if(self.debugStates):
+				print ("TypeSpecifier: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="int"):
 				self.nextToken()
-			self.Args()
-			if(self.currentToken.getType().strip()==")"):
+		elif(self.currentToken.getType().strip()=="void"):
+			if(self.debugStates):
+				print ("TypeSpecifier: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="void"):
 				self.nextToken()
-		elif(self.currentToken.getType().strip()==")" or self.currentToken.getType().strip()==";"):
-			return
+		elif(self.currentToken.getType().strip()=="float"):
+			if(self.debugStates):
+				print ("TypeSpecifier: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="float"):
+				self.nextToken()
 		else:
 			if(self.debug):
-				debugStatement ="in FactorPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
+				print("REJECT@ TypeSpecifier with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def Var(self):
+		if(self.currentToken.getType().strip()=="id"):
+			if(self.debugStates):
+				print ("Var: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="id"):
+				self.nextToken()
+			self.VarPr()
+		else:
+			if(self.debug):
+				print("REJECT@ Var with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def VarDeclaration(self):
+		if(self.currentToken.getType().strip()=="int" or self.currentToken.getType().strip()=="float" or self.currentToken.getType().strip()=="void"):
+			self.TypeSpecifier()
+			self.VarDeclarationPr()
+		else:
+			if(self.debug):
+				print("REJECT@ VarDeclaration with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
+	def VarDeclarationPr(self):
+		if(self.currentToken.getType().strip()=="["):
+			if(self.debugStates):
+				print ("VarDeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="["):
+				self.nextToken()
+			if(self.debugStates):
+				print ("VarDeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="num"):
+				self.nextToken()
+			if(self.debugStates):
+				print ("VarDeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="]"):
+				self.nextToken()
+		elif(self.currentToken.getType().strip()=="id"):
+			if(self.debugStates):
+				print ("VarDeclarationPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
+			if(self.currentToken.getType().strip()=="id"):
+				self.nextToken()
+		else:
+			if(self.debug):
+				print("REJECT@ VarDeclarationPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))
 	def VarPr(self):
-		if(self.debug):
-			print ("VarPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 		if(self.currentToken.getType().strip()=="=" or self.currentToken.getType().strip()=="*" or self.currentToken.getType().strip()=="/" or self.currentToken.getType().strip()==">=" or self.currentToken.getType().strip()=="<=" or self.currentToken.getType().strip()==">" or self.currentToken.getType().strip()=="<" or self.currentToken.getType().strip()=="==" or self.currentToken.getType().strip()=="!=" or self.currentToken.getType().strip()=="+" or self.currentToken.getType().strip()=="-" or self.currentToken.getType().strip()=="," or self.currentToken.getType().strip()==")" or self.currentToken.getType().strip()=="]" or self.currentToken.getType().strip()==";"):
 			return
 		elif(self.currentToken.getType().strip()=="["):
+			if(self.debugStates):
+				print ("VarPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 			if(self.currentToken.getType().strip()=="["):
 				self.nextToken()
 			self.Expression()
+			if(self.debugStates):
+				print ("VarPr: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
 			if(self.currentToken.getType().strip()=="]"):
 				self.nextToken()
 		else:
 			if(self.debug):
-				debugStatement ="in VarPr at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def Call(self):
-		if(self.debug):
-			print ("Call: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="id"):
-			if(self.currentToken.getType().strip()=="id"):
-				self.nextToken()
-			if(self.currentToken.getType().strip()=="("):
-				self.nextToken()
-			self.Args()
-			if(self.currentToken.getType().strip()==")"):
-				self.nextToken()
-		else:
-			if(self.debug):
-				debugStatement ="in Call at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def ReturnStatement(self):
-		if(self.debug):
-			print ("ReturnStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="return"):
-			if(self.currentToken.getType().strip()=="return"):
-				self.nextToken()
-			self.ReturnStatementPr()
-		else:
-			if(self.debug):
-				debugStatement ="in ReturnStatement at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
-	def IterationStatement(self):
-		if(self.debug):
-			print ("IterationStatement: "+self.currentToken.getType()+" | "+self.currentToken.getValue())
-		if(self.currentToken.getType().strip()=="while"):
-			if(self.currentToken.getType().strip()=="while"):
-				self.nextToken()
-			if(self.currentToken.getType().strip()=="("):
-				self.nextToken()
-			self.Expression()
-			if(self.currentToken.getType().strip()==")"):
-				self.nextToken()
-			self.Statement()
-		else:
-			if(self.debug):
-				debugStatement ="in IterationStatement at"+self.currentToken.getType()+str(self.currentTokenNumber)
-			else:
-				debugStatement =""
-			print("REJECT "+debugStatement)
-
-			sys.exit(-1)
+				print("REJECT@ VarPr with "+self.currentToken.getType()+"|"+str(self.currentTokenNumber))

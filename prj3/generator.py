@@ -13,11 +13,13 @@ with open("grammer.form", "r") as ins:
 #Create Dictionary
 string =""
 ruleDict = RuleDictionary(rules)
-for rule in ruleDict.rulesDictionary.values():
-	if(rule.conflict == False):
-		string += ruleDict.generateFunction(rule)
+keylist = ruleDict.rulesDictionary.keys()
+keylist.sort()
+for ruleName in keylist:
+	if(ruleDict.rulesDictionary[ruleName].conflict == False):
+		string += ruleDict.generateFunction(ruleDict.rulesDictionary[ruleName])
 	else:
-		print(rule.name)
+		print(ruleDict.rulesDictionary[ruleName].name)
 #gen header
 imports = "import sys\nfrom to import Token\n"
 header = imports + "class "+outputFileName+":\n"
@@ -27,6 +29,8 @@ constructer += "\t\tself.tokenList = tokenList\n"
 constructer += "\t\tself.currentTokenNumber = 0\n"
 constructer += "\t\tself.currentToken=tokenList[0]\n"
 constructer += "\t\tself.debug = True\n"
+constructer += "\t\tself.debugAccept = True\n"
+constructer += "\t\tself.debugStates = False\n"
 nextToken =   "\tdef nextToken(self):\n"
 nextToken +=   "\t\tif(self.currentTokenNumber < len(self.tokenList)):\n"
 nextToken +=   "\t\t\tself.currentTokenNumber += 1\n"

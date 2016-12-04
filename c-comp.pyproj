@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1705ec65-baa0-4856-b5e3-f2e3315ac4af}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>prj3/cMinusRunner.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>{2af0f10d-7135-4994-9156-5d01c9c11b7e}</InterpreterId>
+    <InterpreterVersion>2.7</InterpreterVersion>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <CommandLineArguments>/tests/test.txt</CommandLineArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="prj1\fsm.PNG" />
+    <Content Include="prj1\stateMachine.html" />
+    <Content Include="prj1\tests\test1.txt" />
+    <Content Include="prj2\tests\test0.txt" />
+    <Content Include="prj2\tests\test1.txt" />
+    <Content Include="prj2\tests\test10.txt" />
+    <Content Include="prj2\tests\test101.txt" />
+    <Content Include="prj2\tests\test102.txt" />
+    <Content Include="prj2\tests\test11.txt" />
+    <Content Include="prj2\tests\test12.txt" />
+    <Content Include="prj2\tests\test13.txt" />
+    <Content Include="prj2\tests\test14.txt" />
+    <Content Include="prj2\tests\test15.txt" />
+    <Content Include="prj2\tests\test16.txt" />
+    <Content Include="prj2\tests\test17.txt" />
+    <Content Include="prj2\tests\test18.txt" />
+    <Content Include="prj2\tests\test19.txt" />
+    <Content Include="prj2\tests\test2.txt" />
+    <Content Include="prj2\tests\test20.txt" />
+    <Content Include="prj2\tests\test21.txt" />
+    <Content Include="prj2\tests\test22.txt" />
+    <Content Include="prj2\tests\test23.txt" />
+    <Content Include="prj2\tests\test25.txt" />
+    <Content Include="prj2\tests\test3.txt" />
+    <Content Include="prj2\tests\test4.txt" />
+    <Content Include="prj2\tests\test5.txt" />
+    <Content Include="prj2\tests\test50.txt" />
+    <Content Include="prj2\tests\test51.txt" />
+    <Content Include="prj2\tests\test52.txt" />
+    <Content Include="prj2\tests\test53.txt" />
+    <Content Include="prj2\tests\test54.txt" />
+    <Content Include="prj2\tests\test6.txt" />
+    <Content Include="prj2\tests\test7.txt" />
+    <Content Include="prj2\tests\test8.txt" />
+    <Content Include="prj2\tests\test9.txt" />
+    <Content Include="prj3\tests\test0.txt" />
+    <Content Include="prj3\tests\test1.txt" />
+    <Content Include="prj3\tests\test10.txt" />
+    <Content Include="prj3\tests\test101.txt" />
+    <Content Include="prj3\tests\test102.txt" />
+    <Content Include="prj3\tests\test11.txt" />
+    <Content Include="prj3\tests\test12.txt" />
+    <Content Include="prj3\tests\test13.txt" />
+    <Content Include="prj3\tests\test14.txt" />
+    <Content Include="prj3\tests\test15.txt" />
+    <Content Include="prj3\tests\test16.txt" />
+    <Content Include="prj3\tests\test17.txt" />
+    <Content Include="prj3\tests\test18.txt" />
+    <Content Include="prj3\tests\test19.txt" />
+    <Content Include="prj3\tests\test2.txt" />
+    <Content Include="prj3\tests\test20.txt" />
+    <Content Include="prj3\tests\test21.txt" />
+    <Content Include="prj3\tests\test22.txt" />
+    <Content Include="prj3\tests\test23.txt" />
+    <Content Include="prj3\tests\test25.txt" />
+    <Content Include="prj3\tests\test3.txt" />
+    <Content Include="prj3\tests\test4.txt" />
+    <Content Include="prj3\tests\test5.txt" />
+    <Content Include="prj3\tests\test50.txt" />
+    <Content Include="prj3\tests\test51.txt" />
+    <Content Include="prj3\tests\test52.txt" />
+    <Content Include="prj3\tests\test53.txt" />
+    <Content Include="prj3\tests\test54.txt" />
+    <Content Include="prj3\tests\test6.txt" />
+    <Content Include="prj3\tests\test7.txt" />
+    <Content Include="prj3\tests\test8.txt" />
+    <Content Include="prj3\tests\test9.txt" />
+    <Content Include="prj4\tests\_GRADING.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="prj1\commentFSM.py" />
+    <Compile Include="prj1\lex.py" />
+    <Compile Include="prj1\token.py" />
+    <Compile Include="prj2\cminus.py" />
+    <Compile Include="prj2\cMinusRunner.py" />
+    <Compile Include="prj2\commentFSM.py" />
+    <Compile Include="prj2\generator.py" />
+    <Compile Include="prj2\lex.py" />
+    <Compile Include="prj2\lexRunner.py" />
+    <Compile Include="prj2\rule.py" />
+    <Compile Include="prj2\to.py" />
+    <Compile Include="prj3\cminus.py" />
+    <Compile Include="prj3\cMinusRunner.py" />
+    <Compile Include="prj3\commentFSM.py" />
+    <Compile Include="prj3\generator.py" />
+    <Compile Include="prj3\lex.py" />
+    <Compile Include="prj3\lexRunner.py" />
+    <Compile Include="prj3\rule.py" />
+    <Compile Include="prj3\to.py" />
+    <Compile Include="prj4\cminus.py" />
+    <Compile Include="prj4\cMinusRunner.py" />
+    <Compile Include="prj4\commentFSM.py" />
+    <Compile Include="prj4\lex.py" />
+    <Compile Include="prj4\to.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="prj1" />
+    <Folder Include="prj1\tests" />
+    <Folder Include="prj2" />
+    <Folder Include="prj2\tests" />
+    <Folder Include="prj3" />
+    <Folder Include="prj3\tests" />
+    <Folder Include="prj4" />
+    <Folder Include="prj4\tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="{2af0f10d-7135-4994-9156-5d01c9c11b7e}\2.7" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>

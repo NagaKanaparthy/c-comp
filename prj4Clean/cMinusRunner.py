@@ -14,4 +14,3 @@ if (lexer.fileFound(fileName)):
 parser = cminus(tokens)
 #parser.nextToken()
 parser.Program()
-print('Done')

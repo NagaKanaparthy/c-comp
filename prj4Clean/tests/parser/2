@@ -1,0 +1,12 @@
+int main(int b)
+{
+   int a;
+   int b[10];
+   int c;
+   a < b[8 + 5];
+   a <= b;
+   a > b;
+   a >= b;
+   a == b;
+   a != b;
+}

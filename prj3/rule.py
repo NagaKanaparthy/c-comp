@@ -1,5 +1,3 @@
-import sys
-from to import Token
 class RuleDictionary:
 	def __init__(self,rulesList):
 		self.rulesDictionary = {}
@@ -11,8 +9,7 @@ class RuleDictionary:
 				#add fuse rules and flag rule if confilct in predict sets
 				ruleInDict.fuseRules(rule)
 	def generateFunction(self,rule):
-		result = "\tdef "+rule.name+"(self):\n"+"\t\tif(self.debug):\n"+\
-				 "\t\t\tprint (\""+rule.name+": \"+self.currentToken.getType()+\" | \"+self.currentToken.getValue())\n"
+		result = "\tdef "+rule.name+"(self):\n"
 		if(rule.conflict):
 			result = "#Conflict" + result
 		else:
@@ -28,35 +25,41 @@ class RuleDictionary:
 					result+="\t\telif("+sRule.getConditionalStatment()+"):\n"
 					result+=self.parseRule(sRule.rule,rule)
 
-		result += "\t\telse:\n\t\t\tif(self.debug):"+\
-				  "\n\t\t\t\tdebugStatement =\"in " + rule.name +" at\"+self.currentToken.getType()+str(self.currentTokenNumber)"+\
-				  "\n\t\t\telse:"+\
-				  "\n\t\t\t\tdebugStatement =\"\""+\
-				  "\n\t\t\tprint(\"REJECT \"+debugStatement)\n"+\
-				  "\n\t\t\tsys.exit(-1)\n"
+#		result += "\t\telse:\n\t\t\tif(self.debug):"+\
+#				  "\n\t\t\t\tprint(\"REJECT@ "+rule.name+" with \"+self.currentToken.getType()+\"|\"+str(self.currentTokenNumber))\n"#+\"\n\t\t\tsys.exit(-1)\n"
 		return result
 	def parseRule(self,ruleString,rule):
 		string = ""
 		tokens = ruleString.split()
+		depth = 3
 		for tok in tokens:
 			if('@' == tok):
-				string += "\t\t\treturn\n"
+				string += self.getTabString(depth) +"return\n"
 			elif(self.isNonTerminal(tok)):
-				string += "\t\t\tself."+tok+"()\n"
+				string += self.getTabString(depth) +"self."+tok+"()\n"
+#				string += "\t\t\tif(self.debugAccept):\n"
+#				string += "\t\t\t\tprint(\"accept@" + rule.name + "@" + ruleString + " : \"+self.currentToken.getType()" + ")\n"
 			else:
-				string += "\t\t\tif(self.currentToken.getType().strip()==\""+tok+"\"):\n"
-				string += "\t\t\t\tself.nextToken()\n"
-				#string += "\t\t\telse: print(\"error \"+self.currentToken.getValue().strip()+\" "+rule.name+"\")\n"
+#				string += "\t\t\tif(self.debugStates):\n"+\
+#				 "\t\t\t\tprint (\""+rule.name+": \"+self.currentToken.getType()+\" | \"+self.currentToken.getValue())\n"
+				string += self.getTabString(depth)+"if(self.currentToken.getType().strip()==\""+tok+"\"):\n"
+				string += self.getTabString(depth+1)+"self.nextToken()\n"
+				depth += 1
 		return string
 	def isNonTerminal(self,token):
 		if(self.rulesDictionary.get(token) != None):
 			return True
 		return False
-	def toString(self):
-		string = ""
-		for rule in self.rulesDictionary.values():
-			string += rule.toString()+'\n'
+	def getTabString(self,numTabs):
+    		string = ""
+		for r in range(0,numTabs):
+    			string += '\t'
 		return string
+	def toString(self):
+			string = ""
+			for rule in self.rulesDictionary.values():
+				string += rule.toString()+'\n'
+			return string
 class Rule:
 	def __init__(self,ruleTokenString):
 		self.conflict = False
@@ -87,7 +90,7 @@ class Rule:
 	def getConflicts(self):
 		string = ""
 		for value in self.confilctingSubRules:
-                                string+="|"+value.rule
+			string+="|"+value.rule
 		return string
 class SubRule:
 	def __init__(self, rule, predicitTokenString):

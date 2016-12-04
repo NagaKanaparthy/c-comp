@@ -1,0 +1,27 @@
+token    |type
+-----------------
+void|void
+main|id
+(|(
+void|void
+)|)
+{|{
+int|int
+x|id
+;|;
+float|float
+y|id
+;|;
+if|if
+(|(
+x|id
+>|>
+y|id
+)|)
+{|{
+x|id
+=|=
+5|num
+;|;
+}|}
+}|}
