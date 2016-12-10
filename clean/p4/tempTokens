@@ -1,0 +1,15 @@
+Tokens : void
+Tokens : main(void)
+Tokens : {
+Tokens : int
+Tokens : x[10];
+Tokens : int
+Tokens : y;
+Tokens : y
+Tokens : =
+Tokens : (x[5]
+Tokens : +
+Tokens : 2)
+Tokens : *
+Tokens : y;
+Tokens : }
