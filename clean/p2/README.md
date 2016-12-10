@@ -1,117 +1,110 @@
-# C- Quadruples Generator  
+# Python Parser Generator Assistance (PPGA)
+##### I like the word FPGA :D No Idea how to program one though :C
 ### Nagavarun Kanaparthy
-## Notes
-Creation notes are in the CodeGenerationNotes.md file.
+
 ## Purpose
-This program will generate simple quadruples as shown in the examples
-below.
-### Supported Quadruples Features
-* scope (blocking)
-* function
-    * params
-* variable allocation
-    * arrays
-* function calls
-* control flow
-    * while
-    * if
-        * else
-* simple arithmetic
-* assignment
-```bash
-turnin fn ree4620_4
-```
-## Examples
-```c
-Example 1
+This was for my COP4620 Compilers class with Dr. Eggen. After the class is
+complete I plan to branch out to creating LL1 parsers for some common
+Serial Communication and bit level parsing.
 
-void main(void)
-{
-  int x;
-  int y;
-  int z;
-  int m;
-   while(x + 3 * y > 5)
-   {
-     x = y + m / z;
-     m = x - y + z * m / z;
-   }
-}
+This will be used on the UNF TALON's Robosub and for speeding up
+interfacing sensors into the robot's system.
 
-----------------------------------------------------
+May be also used for UNF IEEE Southeast Robot. <- not as complicated
 
-1         func           main           void           0
-2         alloc          4                             x
-3         alloc          4                             y
-4         alloc          4                             z
-5         alloc          4                             m
-6         mult           3              y              _t0 
-7         add            x              _t0            _t1
-8         comp           _t1            5              _t2
-9         BRLEQ          _t2                           21
-10        block
-11        div            m              z              _t3
-12        add            y              _t3            _t4
-13        assign         _t4                           x
-14        sub            x              y              _t5
-15        times          z              m              _t6
-16        div            _t6            z              _t7
-17        add            _t5            _t7            _t8
-18        assign         _t8                           m
-19        end            block
-20        BR                                           6
-21        end            func           main
-----------------------------------------------------
-Example 2
+## Usage
+Have the grammar in a csv format using | as the delimiter. You can use
+[this](http://hackingoff.com/compilers/predict-first-follow-set) website to help
+calculate the predicts and see the first and follows. the tokens should be space
+delimited.
 
-int sub(int x, float y)
-{
-   return(x+x);
-}
-void main(void)
-{
-  int x;
-  int y;
-  y = sub(x);
-}
+1. Look at the **grammer.form** file for an example grammer.
+  * **Empty** is the **@** symbol
+  * **$** is reserved as a end of input symbol (You can change in generator.py)
+2. Look at the **token.form** file for an example file with kw
+3. Have your lex analyzer do the token handling you can use the **token.py**
+file to get an idea of how your tokens should look like.
 
 
-----------------------------------------------------
+## COP4620 Class Specs
+The rule table below has my left recursion fixed grammer of the C- grammer.
+I know there are some predict conflicts, so I made the generator let the User
+handle those rules. Gives a nice warning comment on the function declaration.
 
-1         func           sub            int            2
-2         param
-3         alloc          4                             x
-4         param
-5         alloc    		 4                             y
-6         add            x              x              _t0
-7         return                                       _t0
-8         end            func           sub
-9         func           main           void           0
-10        alloc          4                             x
-11        alloc          4                             y
-12        arg                                          x
-13        call           sub            1              _t1
-14        assign         _t1                           y
-15        end            func           main
+I left the original generated one as the **og.py** file.
 
-Example 3
+After my tool generated this,
+  all I did was add accepts and fixed conflict functions.
 
-void main(void)
-{
-   int x[10];
-   int y;
-   y = (x[5] + 2) * y;
-}
+### Rule Table
 
-----------------------------------------------------
-
-1   func    main		void        0
-2   alloc   			40          x
-3   alloc    			4           y
-4   disp    x			20          _t0
-5   add     _t0	        2           _t1
-6   mult    _t1         y           _t2
-7   assign  _t2			            y
-8   end     func		main
-```
-
+|parentRule|subRule|first and follow(predict)|
+|:---:|:--:|:--:|
+|Program|DeclarationList|int float void|
+|DeclarationList|Declaration DeclarationListPr|int float void|
+|DeclarationListPr|Declaration DeclarationListPr|int float void|
+|DeclarationListPr|@|$|
+|Declaration|VarDeclaration|int float void|
+|Declaration|FunDeclaration|int float void|
+|VarDeclaration|TypeSpecifier id|int float void|
+|VarDeclaration|TypeSpecifier [ num ]|int float void|
+|TypeSpecifier|int|int|
+|TypeSpecifier|float|float|
+|TypeSpecifier|void|void|
+|FunDeclaration|TypeSpecifier id ( Params ) CmpdStatement|int float void|
+|Params|ParamList|int float void|
+|Params|void|void|
+|ParamList|Param ParamListPr|int float void|
+|ParamListPr|, Param ParamListPr|,|
+|ParamListPr|@|)|
+|Param|TypeSpecifier id|int float void|
+|Param|TypeSpecifier id [ ]|int float void|
+|CmpdStatement|{ LocalDeclaration StatementList }|{|
+|LocalDeclaration|VarDeclaration LocalDeclaration|int float void|
+|LocalDeclaration|@|; id ( num if return { while|
+|StatementList|Statement StatementList|; id ( num if return { while|
+|StatementList|@|}|
+|Statement|ExpressionStatement|; id ( num|
+|Statement|CmpdStatement|{|
+|Statement|SelectionStatement|if|
+|Statement|IterationStatement|while|
+|Statement|ReturnStatement|return|
+|ExpressionStatement|Expression ;|id ( num|
+|ExpressionStatement|;|;|
+|SelectionStatement|if ( Expression ) Statement|if|
+|SelectionStatement|if ( Expression ) Statement else Statement|if|
+|IterationStatement|while ( Expression ) Statement|while|
+|ReturnStatement|return ;|return|
+|ReturnStatement|return Expression ;|return|
+|Expression|Var = Expression|id|
+|Expression|SimpleExpression|( num id|
+|Var|id|id|
+|Var|id [ Expression ]|id|
+|SimpleExpression|AddExpression RelOp AddExpression|( num id|
+|RelOp|>=|>=|
+|RelOp|<=|<=|
+|RelOp|>|>|
+|RelOp|<|<|
+|RelOp|==|==|
+|RelOp|!=|!=|
+|AddExpression|Term AddExpressionPr|( num id|
+|AddExpressionPr|AddOp Term AddExpressionPr|+ -|
+|AddExpressionPr|@|>= <= > < == != , ) ;|
+|AddOp|+|+|
+|AddOp|-|-|
+|Term|Factor TermPr|( num id|
+|TermPr|MulOp Factor TermPr|\* /|
+|TermPr|@|+ - >= <= > < == != , ) ;|
+|MulOp|\*|\*|
+|MulOp|/|/|
+|Factor|( Expression )|(|
+|Factor|Var|id|
+|Factor|Call|id|
+|Factor|num|num|
+|Call|id ( Args )|id|
+|Args|ArgsList|id ( num ,|
+|Args|@|)|
+|ArgsList|Expression|id ( num|
+|ArgsList|ArgsListPr|,|
+|ArgsListPr|, Expression ArgsListPr|,|
+|ArgsListPr|@|)|

@@ -1,0 +1,76 @@
+Program|DeclarationList|int float void
+DeclarationList|Declaration DeclarationListPr|int float void
+DeclarationListPr|Declaration DeclarationListPr|int float void
+DeclarationListPr|@|$
+TypeSpecifier|int|int
+TypeSpecifier|float|float
+TypeSpecifier|void|void
+DataTypeSpecifier|float|float
+DataTypeSpecifier|void|void
+Declaration|TypeSpecifier DeclarationPr|int float void
+DeclarationPr|( Params ) CmpdStatement|(
+DeclarationPr|VarDeclaration|[ ;
+VarDeclaration|;|; 
+VarDeclaration|[ num ] ;|[
+Params|DataTypeSpecifier id ParamListPr|int float
+Params|void ParamListPr|void
+ParamList|Param ParamListPr|int float
+ParamListPr|, Param ParamListPr|,
+ParamListPr|@|)
+Param|DataTypeSpecifier id ParamPr|int float
+ParamPr|[ ]|[
+ParamPr|@|, )
+CmpdStatement|{ LocalDeclaration StatementList }|{
+LocalDeclaration|VarDeclaration LocalDeclaration|int float void
+LocalDeclaration|@|; id if return { while
+StatementList|Statement StatementList|; id if return { while
+StatementList|@|}
+Statement|ExpressionStatement|; id
+Statement|CmpdStatement|{
+Statement|SelectionStatement|if
+Statement|IterationStatement|while
+Statement|ReturnStatement|return
+ExpressionStatement|Expression ;|id
+ExpressionStatement|;|;
+SelectionStatement|if ( Expression ) Statement SelectionStatementPr|if
+SelectionStatementPr|else Statement|else
+IterationStatement|while ( Expression ) Statement|while
+ReturnStatement|return ReturnStatementPr|return
+ReturnStatementPr|Expression ;|id
+ReturnStatementPr|;|;
+Expression|id ExpressionPr|id
+Expression|( Expression ) TermPr AddExpression SimpleExpression|(
+Expression|DataTypeSpecifier AddExpression SimpleExpression|int float
+ExpressionPr|VarPr ExpressionPrPr|[ = * / >= <= > < == != + -
+ExpressionPr|( Args ) TermPr AddExpression SimpleExpression|(
+ExpressionPrPr|= Expression|=
+ExpressionPrPr|TermPr AddExpression SimpleExpression|* / >= <= > < == != + -
+VarPr|[ Expression ]|[
+VarPr|@|= * / >= <= > < == != + - , ) ] ;
+SimpleExpression|RelOp Term AddExpression|>= <= > < == !=
+SimpleExpression|@|* / + - 
+RelOp|>=|>=
+RelOp|<=|<=
+RelOp|>|>
+RelOp|<|<
+RelOp|==|==
+RelOp|!=|!=
+AddExpression|AddOp Term AddExpression|* /
+AddExpression|@|>= <= > < == != + - , ) ] ;
+AddOp|+|+
+AddOp|-|-
+Term|Factor TermPr|( id num
+TermPr|MulOp Factor TermPr|* /
+TermPr|@|>= <= > < == != + - , ) ] ;
+MulOp|*|*
+MulOp|/|/
+Factor|( Expression )|(
+Factor|id FactorPr|id
+Factor|num|num
+FactorPr|( Args )|(
+FactorPr|VarPr|[
+Args|ArgsList|id ,
+Args|@|)
+ArgsList|Expression ArgsListPr|id
+ArgsListPr|, Expression ArgsListPr|,
+ArgsListPr|@|)

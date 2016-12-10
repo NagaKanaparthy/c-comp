@@ -4,10 +4,11 @@ class cminus:
 	def __init__(self, tokenList):
 		tokenList.append(Token("$","$"))
 		self.tokenList = tokenList
+		#Current Token
 		self.currentTokenNumber = 0
 		self.currentToken=tokenList[0]
-		self.debug = True
-		self.debugReject = True
+		#Debug Flags	
+		self.debugReject = False
 	def nextToken(self):
 		if(self.currentTokenNumber < len(self.tokenList)):
 			self.currentTokenNumber += 1
